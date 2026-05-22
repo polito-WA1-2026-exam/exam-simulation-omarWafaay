@@ -9,16 +9,11 @@
 
 ## API Server
 
-- POST `/api/something`
-  - request parameters and request body content
-  - response body content
-- GET `/api/something`
-  - request parameters
-  - response body content
-- POST `/api/something`
-  - request parameters and request body content
-  - response body content
-- ...
+- GET `/api/health`
+  - No parameters. Response: `{ "ok": true }`
+- GET `/api/courses` (anonymous)
+  - No parameters. Response: JSON array of courses, sorted by `name`
+  - Each object: `code`, `name`, `credits`, `enrollment`, `maxStudents` (number or null), `preparatoryCode` (string or null), `incompatibleWith` (array of course codes)
 
 ## Database Tables
 

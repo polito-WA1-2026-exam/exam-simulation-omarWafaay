@@ -1,6 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import { initDb, get, all } from './db.js';
+import { listCoursesForHomepage } from './dao.js';
 
 const app = express();
 const port = 3001;
@@ -12,9 +13,20 @@ app.use(
     credentials: true,
   })
 );
+app.get('/', (req, res) => {
+  res.send('Hello from the server!');
+});
 
 app.get('/api/health', (req, res) => {
   res.json({ ok: true });
+});
+
+app.get('/api/courses', async (req, res) => {
+  try {
+    res.json(await listCoursesForHomepage());
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 });
 
 app.get('/api/db-check', async (req, res) => {
