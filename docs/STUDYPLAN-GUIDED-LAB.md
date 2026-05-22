@@ -97,9 +97,10 @@ SELECT mode, COUNT(*) FROM study_plans GROUP BY mode;
 
 **Do:**
 
-- Login / logout with session cookies.
-- Middleware `isLoggedIn` for protected APIs.
-- Passwords: hash + salt in DB.
+- Login / logout with session cookies (`POST/GET/DELETE /api/sessions`, same pattern as week10 `qa-server`).
+- Middleware `isLoggedIn` for protected APIs (e.g. `GET /api/study-plan`).
+- Passwords: bcrypt in DB; `verifyStudentLogin` in [`server/dao.js`](../server/dao.js).
+- Manual tests: [`server/test.http`](../server/test.http); `node verify-auth.mjs`.
 
 **Checkpoint:**
 

@@ -1,11 +1,14 @@
-import { all } from './db.js';
+/* Data Access Object (DAO) for StudyPlan */
 
-/**
- * Returns the full course catalog for the anonymous homepage.
- * Sorted by name; includes enrollment, caps, preparatory, and incompatibilities.
- */
-export async function listCoursesForHomepage() {
-  const courses = await all(
+import bcrypt from 'bcrypt';
+import { all, get } from './db.js';
+import { Course, Student } from './StudyPlanModels.js';
+
+/** COURSES */
+
+/** Retrieve all courses for the anonymous homepage, ordered by name. */
+export const listCoursesForHomepage = async () => {
+  const rows = await all(
     `SELECT c.code, c.name, c.credits, c.max_students, c.preparatory_code,
             COUNT(spc.course_code) AS enrollment
      FROM courses c
@@ -25,13 +28,58 @@ export async function listCoursesForHomepage() {
     incompatByCourse.set(row.course_code, list);
   }
 
-  return courses.map((row) => ({
-    code: row.code,
-    name: row.name,
-    credits: row.credits,
-    enrollment: row.enrollment,
-    maxStudents: row.max_students ?? null,
-    preparatoryCode: row.preparatory_code ?? null,
-    incompatibleWith: incompatByCourse.get(row.code) ?? [],
-  }));
-}
+  return rows.map((row) => {
+    const course = new Course(
+      row.code,
+      row.name,
+      row.credits,
+      row.max_students ?? null,
+      row.preparatory_code ?? null,
+      row.enrollment
+    );
+    course.incompatible = incompatByCourse.get(row.code) ?? [];
+    return course;
+  });
+};
+
+/** STUDENTS */
+
+/**
+ * Retrieve a student by login id (stored as users.username), or false if not found.
+ * email field uses username until a separate email column exists in the DB.
+ */
+export const getStudentByUsername = async (username) => {
+  const row = await get(
+    `SELECT u.id, u.username, sp.mode AS plan_type
+     FROM users u
+     LEFT JOIN study_plans sp ON sp.user_id = u.id
+     WHERE u.username = ?`,
+    [username]
+  );
+  if (row === undefined) {
+    return false;
+  }
+  return new Student(
+    row.id,
+    row.username,
+    '',
+    '',
+    row.plan_type ?? null
+  );
+};
+
+/** Verify login; returns a Student or false. */
+export const verifyStudentLogin = async (username, password) => {
+  const row = await get(
+    'SELECT id, username, password_hash FROM users WHERE username = ?',
+    [username]
+  );
+  if (row === undefined) {
+    return false;
+  }
+  const valid = await bcrypt.compare(password, row.password_hash);
+  if (!valid) {
+    return false;
+  }
+  return getStudentByUsername(username);
+};

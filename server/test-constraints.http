@@ -1,0 +1,93 @@
+### Constraint tests — preparatory & incompatible
+### Run with server up: `node index.js`
+### Use REST Client; requests share session cookies in this file.
+
+@baseUrl = http://localhost:3001
+
+### 0) Login as bob (simple part-time plan in seed)
+POST {{baseUrl}}/api/sessions
+Content-Type: application/json
+
+{
+  "username": "bob",
+  "password": "password"
+}
+
+### 1) Reset bob to a small working plan (24 CFU — valid for part-time save)
+# Expected: 200, plan with 4 courses
+PUT {{baseUrl}}/api/study-plan
+Content-Type: application/json
+
+{
+  "courses": ["01OTWOV", "01SQLOV", "01UDFOV", "01OUZPD"]
+}
+
+### --- PREPARATORY (05BIDOV requires 02GOLOV) ---
+
+### 2) Add 05BIDOV without 02GOLOV in plan
+# Expected: 400 { "error": "PREPARATORY", "message": "...02GOLOV..." }
+POST {{baseUrl}}/api/study-plan/courses
+Content-Type: application/json
+
+{
+  "courseCode": "05BIDOV"
+}
+
+### 3) Add preparatory 02GOLOV first
+# Expected: 200, plan includes 02GOLOV
+POST {{baseUrl}}/api/study-plan/courses
+Content-Type: application/json
+
+{
+  "courseCode": "02GOLOV"
+}
+
+### 4) Add 02LSEOV while only 02GOLOV is extra (incompatible pair)
+# Expected: 400 { "error": "INCOMPATIBLE", "message": "...02LSEOV...02GOLOV..." }
+POST {{baseUrl}}/api/study-plan/courses
+Content-Type: application/json
+
+{
+  "courseCode": "02LSEOV"
+}
+
+### 5) Add 05BIDOV now (02GOLOV is preparatory)
+# Expected: 200
+POST {{baseUrl}}/api/study-plan/courses
+Content-Type: application/json
+
+{
+  "courseCode": "05BIDOV"
+}
+
+### 6) Try to remove 02GOLOV while 05BIDOV still in plan
+# Expected: 400 { "error": "PREPARATORY", "message": "...05BIDOV depends..." }
+DELETE {{baseUrl}}/api/study-plan/courses/02GOLOV
+
+### 7) Remove 05BIDOV first, then 02GOLOV is allowed
+# Expected: 200, 200
+DELETE {{baseUrl}}/api/study-plan/courses/05BIDOV
+
+DELETE {{baseUrl}}/api/study-plan/courses/02GOLOV
+
+### --- INCOMPATIBLE on bob's existing courses (01UDFOV vs 01TXYOV) ---
+
+### 8) Add 01TXYOV — bob still has 01UDFOV from step 1
+# Expected: 400 { "error": "INCOMPATIBLE" }
+POST {{baseUrl}}/api/study-plan/courses
+Content-Type: application/json
+
+{
+  "courseCode": "01TXYOV"
+}
+
+### 9) Inspect catalog: preparatory & incompatible on courses list
+GET {{baseUrl}}/api/courses
+
+### 10) Restore bob seed plan (optional)
+PUT {{baseUrl}}/api/study-plan
+Content-Type: application/json
+
+{
+  "courses": ["01OTWOV", "01SQLOV", "01UDFOV", "01OUZPD"]
+}

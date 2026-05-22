@@ -1,0 +1,57 @@
+### StudyPlan API — manual tests (VS Code REST Client or similar)
+
+@baseUrl = http://localhost:3001
+
+### Health
+GET {{baseUrl}}/api/health
+
+### Courses (anonymous)
+GET {{baseUrl}}/api/courses
+
+### Login — sets session cookie
+POST {{baseUrl}}/api/sessions
+Content-Type: application/json
+
+{
+  "username": "alice",
+  "password": "password"
+}
+
+### Current student (requires login cookie from above)
+GET {{baseUrl}}/api/sessions/current
+
+### Study plan (requires login)
+GET {{baseUrl}}/api/study-plan
+
+### Create empty plan (user with no plan yet)
+POST {{baseUrl}}/api/study-plan
+Content-Type: application/json
+
+{
+  "mode": "part"
+}
+
+### Add course to plan
+POST {{baseUrl}}/api/study-plan/courses
+Content-Type: application/json
+
+{
+  "courseCode": "03UEWOV"
+}
+
+### Remove course from plan
+DELETE {{baseUrl}}/api/study-plan/courses/03UEWOV
+
+### Save plan (validate credits; optional full list for cancel)
+PUT {{baseUrl}}/api/study-plan
+Content-Type: application/json
+
+{
+  "courses": ["01OTWOV", "01SQLOV", "01UDFOV", "01OUZPD"]
+}
+
+### Delete entire plan
+DELETE {{baseUrl}}/api/study-plan
+
+### Logout
+DELETE {{baseUrl}}/api/sessions/current

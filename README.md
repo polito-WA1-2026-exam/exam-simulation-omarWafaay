@@ -12,8 +12,34 @@
 - GET `/api/health`
   - No parameters. Response: `{ "ok": true }`
 - GET `/api/courses` (anonymous)
-  - No parameters. Response: JSON array of courses, sorted by `name`
-  - Each object: `code`, `name`, `credits`, `enrollment`, `maxStudents` (number or null), `preparatoryCode` (string or null), `incompatibleWith` (array of course codes)
+  - No parameters. Response: JSON array of `Course` objects, sorted by `name`
+  - Each object: `code`, `name`, `credits`, `maxStudents`, `preparatoryCourse`, `incompatible` (array), `enrolled` (count)
+- POST `/api/sessions` (login)
+  - Body: `{ "username": "...", "password": "..." }`. Response `201`: `Student` object; sets session cookie
+- GET `/api/sessions/current`
+  - Response: `Student` if logged in, else `401`
+- DELETE `/api/sessions/current` (logout)
+  - Clears session; response `204`
+- GET `/api/study-plan` (protected)
+  - Response: `StudyPlan` or `null` if none (`planType`, `courses[]`, `totalCredits`, `minCredits`, `maxCredits`)
+- POST `/api/study-plan` (protected)
+  - Body: `{ "mode": "full" | "part" }`. Creates empty plan; `409` if one exists
+- PUT `/api/study-plan` (protected)
+  - Save: validates credit range (full 60–80, part 20–40). Optional body `{ "courses": ["...", ...] }` replaces all courses (use to cancel edits)
+- DELETE `/api/study-plan` (protected)
+  - Deletes plan and courses; `204`
+- POST `/api/study-plan/courses` (protected)
+  - Body: `{ "courseCode": "..." }`. Returns updated plan; `400` with `{ "error": "INCOMPATIBLE" | "PREPARATORY" | "MAX_STUDENTS" | ... }`
+- DELETE `/api/study-plan/courses/:code` (protected)
+  - Removes course; `400` if preparatory dependency blocks removal
+
+**Cancel (client):** keep snapshot from GET; on Cancel, `PUT` with original `courses` array (no server-side draft table).
+
+## Server data models
+
+- `Course` ([`server/StudyPlanModels.js`](server/StudyPlanModels.js)): code, name, credits, maxStudents, preparatoryCourse, incompatible[], enrolled
+- `Student` ([`server/StudyPlanModels.js`](server/StudyPlanModels.js)): studentId, email, name, surname, planType
+- `StudyPlan` ([`server/StudyPlanModels.js`](server/StudyPlanModels.js)): planId, planType, courses[], totalCredits, minCredits, maxCredits
 
 ## Database Tables
 
