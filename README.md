@@ -22,9 +22,11 @@
 
 ## Database Tables
 
-- Table `users` - contains xx yy zz
-- Table `something` - contains ww qq ss
-- ...
+- Table `courses` — course catalog: code (PK), name, credits, optional max_students, optional preparatory_code (FK to courses)
+- Table `incompatibilities` — pairs of courses that cannot be in the same plan
+- Table `users` — username and bcrypt password_hash
+- Table `study_plans` — one saved plan per user (mode: full or part)
+- Table `study_plan_courses` — courses in each saved plan (enrollment counts derived from here)
 
 ## Main React Components
 
@@ -40,8 +42,11 @@
 
 ## Users Credentials
 
-- username, password (plus any other requested info)
-- username, password (plus any other requested info)
+- alice, password (full-time study plan)
+- bob, password (part-time study plan)
+- carol, password (full-time; includes capped course 01TXYOV)
+- dave, password (part-time; includes 01TXYOV and 01URSPD)
+- eve, password (full-time; fills enrollment caps on 01TXYOV and 01URSPD)
 
 ## Use of AI Tools
 Briefly describe whether you used any AI tools (e.g., ChatGPT, GitHub Copilot, Claude) while working on this project, for which purposes (e.g., clarifying concepts, debugging, generating code), and how you verified or adapted their output.
