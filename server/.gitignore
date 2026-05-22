@@ -1,4 +1,5 @@
 node_modules/
+studyplan.sqlite
 .DS_Store
 Desktop.ini
 Thumbs.db
