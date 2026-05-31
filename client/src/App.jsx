@@ -1,11 +1,27 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from './assets/vite.svg'
 import heroImg from './assets/hero.png'
 import './App.css'
 
+const API_BASE = 'http://localhost:3001'
+
 function App() {
   const [count, setCount] = useState(0)
+  const [apiStatus, setApiStatus] = useState('checking server…')
+
+  useEffect(() => {
+    fetch(`${API_BASE}/api/health`, { credentials: 'include' })
+      .then((res) => {
+        if (!res.ok) throw new Error(`HTTP ${res.status}`)
+        return res.json()
+      })
+      .then((data) => {
+        if (data.ok) setApiStatus('API connected (CORS + credentials OK)')
+        else setApiStatus('API responded but unexpected body')
+      })
+      .catch((err) => setApiStatus(`API error: ${err.message}`))
+  }, [])
 
   return (
     <>
@@ -19,6 +35,9 @@ function App() {
           <h1>Get started</h1>
           <p>
             Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
+          </p>
+          <p>
+            <strong>Step 0:</strong> {apiStatus}
           </p>
         </div>
         <button
