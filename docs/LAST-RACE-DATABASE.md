@@ -81,7 +81,7 @@ At least 8 events; effects in [-4, +4].
 
 | username | password | Notes |
 |----------|----------|--------|
-| `player1` | `password` | Two **completed** games (best score **18**) |
+| `player1` | `password` | Two **completed** games (best score **21**) |
 | `player2` | `password` | One **completed** game (score **22**) |
 | `player3` | `password` | No completed games (for ranking contrast) |
 

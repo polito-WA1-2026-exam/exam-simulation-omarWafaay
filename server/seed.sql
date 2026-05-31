@@ -88,7 +88,7 @@ INSERT INTO users (username, password_hash) VALUES
   ('player2', '$2b$10$tx5elh4hESKg3s80rsegGOSH1AsMM1w4DgaCBJbSIw57SEf1Ljhy2'),
   ('player3', '$2b$10$Nmm.Q/x5ch.kxH1F16R/d./xyxQ2LJkjrCicq21XDKQ6.OT/vYk5i');
 
--- player1: completed games (best score 18)
+-- player1: completed games (best score 21)
 INSERT INTO games (user_id, start_station_id, dest_station_id, route_json, status, final_score)
 SELECT
   u.id,
@@ -96,7 +96,7 @@ SELECT
   (SELECT id FROM stations WHERE name = 'Viale dei Mosaici'),
   '[["Centrale","Fontana Oscura"],["Fontana Oscura","Borgo Sereno"],["Borgo Sereno","Colle Antico"],["Colle Antico","Viale dei Mosaici"]]',
   'completed',
-  18
+  21
 FROM users u WHERE u.username = 'player1';
 
 INSERT INTO games (user_id, start_station_id, dest_station_id, route_json, status, final_score)
@@ -120,7 +120,7 @@ SELECT
   22
 FROM users u WHERE u.username = 'player2';
 
--- Execution steps for player1 best game (final_score 18)
+-- Execution steps for player1 best game (final_score 21)
 INSERT INTO game_steps (game_id, step_order, from_station_id, to_station_id, event_id, coins_after)
 SELECT
   g.id, 1,
@@ -130,7 +130,7 @@ SELECT
   20
 FROM games g
 JOIN users u ON u.id = g.user_id
-WHERE u.username = 'player1' AND g.final_score = 18;
+WHERE u.username = 'player1' AND g.final_score = 21;
 
 INSERT INTO game_steps (game_id, step_order, from_station_id, to_station_id, event_id, coins_after)
 SELECT
@@ -141,7 +141,7 @@ SELECT
   21
 FROM games g
 JOIN users u ON u.id = g.user_id
-WHERE u.username = 'player1' AND g.final_score = 18;
+WHERE u.username = 'player1' AND g.final_score = 21;
 
 INSERT INTO game_steps (game_id, step_order, from_station_id, to_station_id, event_id, coins_after)
 SELECT
@@ -152,7 +152,7 @@ SELECT
   19
 FROM games g
 JOIN users u ON u.id = g.user_id
-WHERE u.username = 'player1' AND g.final_score = 18;
+WHERE u.username = 'player1' AND g.final_score = 21;
 
 INSERT INTO game_steps (game_id, step_order, from_station_id, to_station_id, event_id, coins_after)
 SELECT
@@ -160,7 +160,7 @@ SELECT
   (SELECT id FROM stations WHERE name = 'Colle Antico'),
   (SELECT id FROM stations WHERE name = 'Viale dei Mosaici'),
   (SELECT id FROM events WHERE description = 'Delay bonus'),
-  18
+  21
 FROM games g
 JOIN users u ON u.id = g.user_id
-WHERE u.username = 'player1' AND g.final_score = 18;
+WHERE u.username = 'player1' AND g.final_score = 21;
