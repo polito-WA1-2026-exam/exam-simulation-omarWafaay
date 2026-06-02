@@ -34,7 +34,7 @@ erDiagram
 | `station_lines` | Which station belongs to which line and in what **order** (defines adjacency along the line). |
 | `segments` | Undirected edge between two adjacent stations (`station_a_id` < `station_b_id`). Used for planning list and route validation. |
 | `events` | Random event catalog (`description`, `effect` from -4 to +4). |
-| `games` | One play session: owner, start/dest, optional `route_json`, `status`, `final_score`. |
+| `games` | One play session: owner, start/dest, optional `route_json`, `planning_started_at`, `status`, `final_score`. |
 | `game_steps` | Per-leg execution log (from/to station, event, coins after step) for completed runs. |
 
 **Derived (not stored):** interchange station = appears in more than one row in `station_lines` for different `line_id` values.
@@ -85,7 +85,11 @@ At least 8 events; effects in [-4, +4].
 | `player2` | `password` | One **completed** game (score **22**) |
 | `player3` | `password` | No completed games (for ranking contrast) |
 
-`route_json` format: JSON array of `[fromStationName, toStationName]` strings in travel order.
+`route_json` format: JSON array of `[fromStationId, toStationId]` integer pairs in travel order, e.g. `[[1,6],[6,7]]`. Names are resolved via `stations` when needed for display.
+
+`planning_started_at`: ISO datetime set when the game enters `planning`; used with a 90s server deadline (see [LAST-RACE-API-PLAN.md](./LAST-RACE-API-PLAN.md)).
+
+**Note:** Current seed still uses name-based `route_json` until Step 4 migration; update `seed.sql` and `audit-seed.mjs` when implementing game APIs.
 
 ---
 

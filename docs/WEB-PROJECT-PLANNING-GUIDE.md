@@ -281,4 +281,4 @@ If behind: ship **correct server rules** + minimal UI before polish.
 
 ---
 
-*Pair this guide with `LAST-RACE-DATABASE.md` for the exam DB design, and `STUDYPLAN-GUIDED-LAB.md` only as a generic phase reference (demo project).*
+*Pair this guide with `LAST-RACE-DATABASE.md` (DB), `LAST-RACE-API-PLAN.md` (HTTP APIs), and `LAST-RACE-BACKLOG.md` (checklist). `STUDYPLAN-GUIDED-LAB.md` is only a generic phase reference (demo project).*
