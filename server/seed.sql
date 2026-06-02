@@ -83,10 +83,11 @@ INSERT INTO events (description, effect) VALUES
   ('Signal failure', -4),
   ('Lucky find', 4);
 
-INSERT INTO users (username, password_hash) VALUES
-  ('player1', '$2b$10$mxrdejPNQjOEVOf5Q0dKe.JtSICQ/s7N3/QRgVQ1t8kKmBve3xsJm'),
-  ('player2', '$2b$10$tx5elh4hESKg3s80rsegGOSH1AsMM1w4DgaCBJbSIw57SEf1Ljhy2'),
-  ('player3', '$2b$10$Nmm.Q/x5ch.kxH1F16R/d./xyxQ2LJkjrCicq21XDKQ6.OT/vYk5i');
+-- password = scrypt(plain, salt, 16) as hex (see scripts/generate-user-seed.mjs)
+INSERT INTO users (username, password, salt) VALUES
+  ('player1', '0082c7cb58611b309c54e8eed9de140e', '9d4b8f925ca5e3a54440287b2dc0c9bc'),
+  ('player2', '960f7cfb98d4cee7b3fabdd4bff015fa', '81ecb808cee07c1bfb6e7d93a9071cf3'),
+  ('player3', '622f4edfdc6d56ed71943213f9e657a5', 'ce9dcd1fbcfa1155c77b312b5089cdc2');
 
 -- player1: completed games (best score 21)
 INSERT INTO games (user_id, start_station_id, dest_station_id, route_json, status, final_score)

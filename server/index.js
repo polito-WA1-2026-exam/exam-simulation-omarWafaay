@@ -1,6 +1,11 @@
 import express from 'express';
 import cors from 'cors';
+import session from 'express-session';
+import passport from 'passport';
+import { Strategy as LocalStrategy } from 'passport-local';
 import { initDb, get } from './db.js';
+import { getUser } from './dao/userDao.js';
+import { isLoggedIn } from './middleware/isLoggedIn.js';
 
 const app = express();
 const port = 3001;
@@ -12,13 +17,87 @@ app.use(
     credentials: true,
   })
 );
+app.use(express.json());
+
+app.use(
+  session({
+    secret: 'last-race-session-secret',
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      httpOnly: true,
+      secure: false,
+      sameSite: 'lax',
+    },
+  })
+);
+
+passport.use(
+  new LocalStrategy(async (username, password, cb) => {
+    try {
+      const user = await getUser(username, password);
+      if (!user) {
+        return cb(null, false, { message: 'Incorrect username or password.' });
+      }
+      return cb(null, user);
+    } catch (err) {
+      return cb(err);
+    }
+  })
+);
+
+passport.serializeUser((user, cb) => {
+  cb(null, user);
+});
+
+passport.deserializeUser((user, cb) => {
+  cb(null, user);
+});
+
+app.use(passport.authenticate('session'));
 
 app.get('/api/health', (req, res) => {
   res.json({ ok: true });
 });
 
-/** Dev helper — confirms DB seed after Step 1 */
-app.get('/api/db-check', async (req, res) => {
+/** POST /api/sessions — login (Passport local + req.login for session cookie) */
+app.post('/api/sessions', (req, res, next) => {
+  passport.authenticate('local', (err, user) => {
+    if (err) {
+      return next(err);
+    }
+    if (!user) {
+      return res.status(401).json({ error: 'INVALID_CREDENTIALS' });
+    }
+    req.login(user, (loginErr) => {
+      if (loginErr) {
+        return next(loginErr);
+      }
+      return res.status(201).json(user);
+    });
+  })(req, res, next);
+});
+
+/** GET /api/sessions/current */
+app.get('/api/sessions/current', (req, res) => {
+  if (req.isAuthenticated()) {
+    return res.json(req.user);
+  }
+  return res.status(401).json({ error: 'UNAUTHORIZED' });
+});
+
+/** DELETE /api/sessions/current — logout */
+app.delete('/api/sessions/current', (req, res, next) => {
+  req.logout((err) => {
+    if (err) {
+      return next(err);
+    }
+    return res.status(204).end();
+  });
+});
+
+/** Dev helper — protected (tests auth) */
+app.get('/api/db-check', isLoggedIn, async (req, res) => {
   try {
     const [lines, stations, events, users, interchanges] = await Promise.all([
       get('SELECT COUNT(*) AS n FROM lines'),

@@ -1,0 +1,31 @@
+@baseUrl = http://localhost:3001
+# Run requests in order so the session cookie is reused (VS Code REST Client).
+# Or run: node verify-auth-api.mjs (starts its own server)
+
+### Health (public)
+GET {{baseUrl}}/api/health
+
+### DB check without login — expect 401
+GET {{baseUrl}}/api/db-check
+
+### Login player1
+# @name login
+POST {{baseUrl}}/api/sessions
+Content-Type: application/json
+
+{
+  "username": "player2",
+  "password": "password"
+}
+
+### Current user (use cookie from login)
+GET {{baseUrl}}/api/sessions/current
+
+### DB check with session cookie
+GET {{baseUrl}}/api/db-check
+
+### Logout
+DELETE {{baseUrl}}/api/sessions/current
+
+### Current user after logout — expect 401
+GET {{baseUrl}}/api/sessions/current

@@ -5,7 +5,7 @@
 **Work branch:** `dev`  
 **Submit on:** `main` + git tag `final` (deadline 2026-06-22)
 
-**You stopped after:** Step 1 (database) + seed score fix. **Next up:** APIs — see [LAST-RACE-API-PLAN.md](./LAST-RACE-API-PLAN.md) (auth first, then reads, games, ranking).
+**You stopped after:** Step 2 (auth) implemented — verify with `test.http` or restart server. **Next up:** Step 3 (read APIs).
 
 ---
 
@@ -16,8 +16,8 @@
 | 0 | Two servers, CORS, `/api/health` | ✅ Done |
 | 1 | Schema, seed, `initDb`, docs | ✅ Done |
 | 1b | Seed audit + player1 score fix (21) | ✅ Done |
-| 2 | Passport login/logout | ⬜ Next |
-| 3 | Read APIs (network, segments) | ⬜ |
+| 2 | Passport login/logout | ✅ Done |
+| 3 | Read APIs (network, segments) | ⬜ Next |
 | 4 | Game lifecycle APIs + route validation | ⬜ |
 | 5 | Ranking API | ⬜ |
 | 6 | React router + auth guard | ⬜ |
@@ -65,17 +65,17 @@
 
 ---
 
-## Step 2 — Authentication ⬜ **NEXT**
+## Step 2 — Authentication ✅
 
 See [LAST-RACE-API-PLAN.md](./LAST-RACE-API-PLAN.md) §3–§10.
 
-- [ ] `express-session` + Passport local strategy
-- [ ] `POST /api/sessions` (login)
-- [ ] `GET /api/sessions/current`
-- [ ] `DELETE /api/sessions/current` (logout)
-- [ ] `isLoggedIn` middleware
-- [ ] bcrypt verify against `users.password_hash`
-- [ ] `server/verify-auth.mjs` or `test.http`
+- [x] `express-session` + Passport local strategy
+- [x] `POST /api/sessions` (login)
+- [x] `GET /api/sessions/current`
+- [x] `DELETE /api/sessions/current` (logout)
+- [x] `isLoggedIn` middleware (`/api/db-check` protected)
+- [x] scrypt + salt in `dao/userDao.js` (WA1 week05)
+- [x] `server/verify-auth.mjs` (DAO) + `server/verify-auth-api.mjs` (HTTP) + `server/test.http`
 
 **Done when:** cookie login works; protected routes return 401 when logged out.
 

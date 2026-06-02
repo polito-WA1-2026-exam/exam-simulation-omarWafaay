@@ -28,7 +28,7 @@ erDiagram
 
 | Table | Purpose |
 |--------|---------|
-| `users` | Registered players (`username`, bcrypt `password_hash`). No registration API — seed only. |
+| `users` | Registered players (`username`, `password` + `salt` — scrypt, WA1 week05 style). No registration API — seed only. |
 | `lines` | Metro lines (fixed network). |
 | `stations` | Stops on the network. |
 | `station_lines` | Which station belongs to which line and in what **order** (defines adjacency along the line). |
