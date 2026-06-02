@@ -296,6 +296,7 @@ Login
 | `server/index.js` | Express, CORS, session, routes |
 | `server/middleware/isLoggedIn.js` | Return `401` if not authenticated |
 | `server/dao/userDao.js` | bcrypt login |
+| `server/LastRaceModels.js` | `User`, `Station`, `Segment`, `Line`, `Game`, … (WA1 constructor style) |
 | `server/dao/networkDao.js` | Full/planning network, segment list |
 | `server/dao/gameDao.js` | Games CRUD, ranking query |
 | `server/services/routeValidator.js` | Validate submitted route |

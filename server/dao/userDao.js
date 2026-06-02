@@ -1,12 +1,13 @@
 import crypto from 'crypto';
 import { promisify } from 'util';
 import { get } from '../db.js';
+import { User } from '../LastRaceModels.js';
 
 const scrypt = promisify(crypto.scrypt);
 
 /**
- * Verify credentials (WA1 week05 pattern: scrypt + per-user salt).
- * @returns {{ id: number, username: string } | false}
+ * Verify credentials (WA1 week05: scrypt + per-user salt).
+ * @returns {User | false}
  */
 export async function getUser(username, password) {
   const row = await get(
@@ -26,5 +27,5 @@ export async function getUser(username, password) {
     return false;
   }
 
-  return { id: row.id, username: row.username };
+  return new User(row.id, row.username);
 }

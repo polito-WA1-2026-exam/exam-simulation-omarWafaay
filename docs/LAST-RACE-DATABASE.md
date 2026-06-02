@@ -5,6 +5,8 @@ Branch: `dev`
 
 This document is the reference for `server/schema.sql` and `server/seed.sql`. Business rules (route validation, scoring) are enforced in Express; the DB stores data and history.
 
+API response objects are built in DAOs using constructor functions in [`server/LastRaceModels.js`](../server/LastRaceModels.js) (WA1 / `QAModels.js` style).
+
 ---
 
 ## ER overview

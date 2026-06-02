@@ -6,6 +6,11 @@ import { Strategy as LocalStrategy } from 'passport-local';
 import { initDb, get } from './db.js';
 import { getUser } from './dao/userDao.js';
 import { isLoggedIn } from './middleware/isLoggedIn.js';
+import {
+  getNetworkFull,
+  getNetworkPlanning,
+  listSegments,
+} from './dao/networkDao.js';
 
 const app = express();
 const port = 3001;
@@ -94,6 +99,31 @@ app.delete('/api/sessions/current', (req, res, next) => {
     }
     return res.status(204).end();
   });
+});
+
+/** GET /api/network?view=full|planning */
+app.get('/api/network', isLoggedIn, async (req, res, next) => {
+  try {
+    const view = req.query.view;
+    if (view === 'full') {
+      return res.json(await getNetworkFull());
+    }
+    if (view === 'planning') {
+      return res.json(await getNetworkPlanning());
+    }
+    return res.status(400).json({ error: 'BAD_REQUEST', message: 'view must be full or planning' });
+  } catch (err) {
+    return next(err);
+  }
+});
+
+/** GET /api/segments — all segment pairs for planning */
+app.get('/api/segments', isLoggedIn, async (req, res, next) => {
+  try {
+    res.json(await listSegments());
+  } catch (err) {
+    return next(err);
+  }
 });
 
 /** Dev helper — protected (tests auth) */

@@ -5,7 +5,7 @@
 **Work branch:** `dev`  
 **Submit on:** `main` + git tag `final` (deadline 2026-06-22)
 
-**You stopped after:** Step 2 (auth) implemented — verify with `test.http` or restart server. **Next up:** Step 3 (read APIs).
+**You stopped after:** Step 3 (read APIs). **Next up:** Step 4 (game APIs).
 
 ---
 
@@ -17,8 +17,8 @@
 | 1 | Schema, seed, `initDb`, docs | ✅ Done |
 | 1b | Seed audit + player1 score fix (21) | ✅ Done |
 | 2 | Passport login/logout | ✅ Done |
-| 3 | Read APIs (network, segments) | ⬜ Next |
-| 4 | Game lifecycle APIs + route validation | ⬜ |
+| 3 | Read APIs (network, segments) | ✅ Done |
+| 4 | Game lifecycle APIs + route validation | ⬜ Next |
 | 5 | Ranking API | ⬜ |
 | 6 | React router + auth guard | ⬜ |
 | 7 | Anonymous instructions (no map) | ⬜ |
@@ -81,12 +81,13 @@ See [LAST-RACE-API-PLAN.md](./LAST-RACE-API-PLAN.md) §3–§10.
 
 ---
 
-## Step 3 — Read APIs ⬜
+## Step 3 — Read APIs ✅
 
-- [ ] `GET /api/network?view=full` — lines, stations, segments (setup)
-- [ ] `GET /api/network?view=planning` — stations only
-- [ ] `GET /api/segments` — all segment pairs
-- [ ] `server/dao/networkDao.js`
+- [x] `GET /api/network?view=full` — lines, stations, segments (setup)
+- [x] `GET /api/network?view=planning` — stations only
+- [x] `GET /api/segments` — all segment pairs
+- [x] `server/dao/networkDao.js`
+- [x] `server/verify-network.mjs`
 
 **Done when:** curl with session returns correct JSON.
 

@@ -24,6 +24,15 @@ GET {{baseUrl}}/api/sessions/current
 ### DB check with session cookie
 GET {{baseUrl}}/api/db-check
 
+### Network full (setup map)
+GET {{baseUrl}}/api/network?view=full
+
+### Network planning (stations only)
+GET {{baseUrl}}/api/network?view=planning
+
+### All segment pairs
+GET {{baseUrl}}/api/segments
+
 ### Logout
 DELETE {{baseUrl}}/api/sessions/current
 
