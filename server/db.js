@@ -54,6 +54,16 @@ async function execSqlFile(filename) {
   });
 }
 
+/** Open existing database.sqlite (e.g. verify scripts while server is running). */
+export async function attachToExistingDb() {
+  if (db) return;
+  if (!fs.existsSync(dbPath)) {
+    throw new Error('database.sqlite not found — start the server or run initDb() first');
+  }
+  db = await openDatabase();
+  await run('PRAGMA foreign_keys = ON');
+}
+
 /** Recreate DB from schema.sql + seed.sql (exam-friendly clean state). */
 export async function initDb() {
   if (db) {

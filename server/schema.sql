@@ -45,9 +45,10 @@ CREATE TABLE IF NOT EXISTS events (
 CREATE TABLE IF NOT EXISTS games (
   id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
   user_id INTEGER NOT NULL,
-  start_station_id INTEGER NOT NULL,
-  dest_station_id INTEGER NOT NULL,
+  start_station_id INTEGER,
+  dest_station_id INTEGER,
   route_json TEXT,
+  planning_started_at TEXT,
   status TEXT NOT NULL CHECK (
     status IN ('setup', 'planning', 'execution', 'completed')
   ),

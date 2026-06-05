@@ -1,8 +1,14 @@
+/**
+ * Route validation for PUT /api/games/:id/route.
+ * Exam (2026-06-05): correct start/end, real segments, line rules at interchanges,
+ * each undirected segment at most once; same station may appear multiple times.
+ */
 import { all } from '../db.js';
 
+/** With our start/dest picker, shortest path is ≥3; submitted routes need at least 3 legs too. */
 const MIN_SEGMENTS = 3;
 
-/** Undirected segment key for duplicate detection (exam: each segment at most once). */
+/** DB stores undirected edges; [1,6] and [6,1] are the same segment. */
 export function segmentKey(fromId, toId) {
   const lo = Math.min(fromId, toId);
   const hi = Math.max(fromId, toId);
@@ -27,6 +33,7 @@ async function loadNetworkContext() {
     byLine.get(row.lineId).push(row);
   }
 
+  /** Which metro lines contain this adjacent pair (consecutive on station_lines). */
   const linesForSegment = (fromId, toId) => {
     const lo = Math.min(fromId, toId);
     const hi = Math.max(fromId, toId);
@@ -61,9 +68,7 @@ async function loadNetworkContext() {
 }
 
 /**
- * Validate a submitted route (station ID pairs).
- * @param {{ startStationId: number, destinationStationId: number, segments: number[][] }} input
- * @returns {Promise<boolean>}
+ * @returns {Promise<boolean>} true if route satisfies all exam rules
  */
 export async function isValidRoute({ startStationId, destinationStationId, segments }) {
   const { hasSegment, linesForSegment, interchangeIds } = await loadNetworkContext();
@@ -91,13 +96,16 @@ export async function isValidRoute({ startStationId, destinationStationId, segme
     const [fromId, toId] = leg;
     if (!Number.isInteger(fromId) || !Number.isInteger(toId)) return false;
     if (!hasSegment(fromId, toId)) return false;
+
     const key = segmentKey(fromId, toId);
     if (usedSegments.has(key)) return false;
     usedSegments.add(key);
+
     if (prevTo !== null && fromId !== prevTo) return false;
     prevTo = toId;
   }
 
+  // Line change at station b1: both legs must share a line, or b1 is an interchange.
   for (let i = 0; i < segments.length - 1; i++) {
     const [a1, b1] = segments[i];
     const [a2, b2] = segments[i + 1];
@@ -113,10 +121,7 @@ export async function isValidRoute({ startStationId, destinationStationId, segme
   return true;
 }
 
-/**
- * Find one valid route between start and destination (for tests / tooling).
- * @returns {Promise<number[][] | null>}
- */
+/** DFS helper for verify-games.mjs — not used in normal player flow. */
 export async function findValidRouteSegments(startStationId, destinationStationId) {
   const ctx = await loadNetworkContext();
   const segmentRows = await all('SELECT station_a_id, station_b_id FROM segments');
@@ -139,7 +144,6 @@ export async function findValidRouteSegments(startStationId, destinationStationI
     return true;
   }
 
-  // Exam: same station may repeat; each undirected segment may be used only once.
   function dfs(current, legs, usedSegments) {
     if (current === destinationStationId && legs.length >= MIN_SEGMENTS) {
       return legs;

@@ -95,7 +95,7 @@ SELECT
   u.id,
   (SELECT id FROM stations WHERE name = 'Centrale'),
   (SELECT id FROM stations WHERE name = 'Viale dei Mosaici'),
-  '[["Centrale","Fontana Oscura"],["Fontana Oscura","Borgo Sereno"],["Borgo Sereno","Colle Antico"],["Colle Antico","Viale dei Mosaici"]]',
+  '[[1,6],[6,7],[7,8],[8,9]]',
   'completed',
   21
 FROM users u WHERE u.username = 'player1';
@@ -105,7 +105,7 @@ SELECT
   u.id,
   (SELECT id FROM stations WHERE name = 'Centrale'),
   (SELECT id FROM stations WHERE name = 'Campo dell''Eco'),
-  '[["Centrale","Porta Velaria"],["Porta Velaria","Fontana Oscura"],["Fontana Oscura","Stazione Lago"],["Stazione Lago","Torre Cinerea"],["Torre Cinerea","Campo dell''Eco"]]',
+  '[[1,2],[2,6],[6,10],[10,11],[11,12]]',
   'completed',
   12
 FROM users u WHERE u.username = 'player1';
@@ -116,7 +116,7 @@ SELECT
   u.id,
   (SELECT id FROM stations WHERE name = 'Piazza delle Lanterne'),
   (SELECT id FROM stations WHERE name = 'Borgo Sereno'),
-  '[["Piazza delle Lanterne","Torre Cinerea"],["Torre Cinerea","Viale dei Mosaici"],["Viale dei Mosaici","Colle Antico"],["Colle Antico","Borgo Sereno"]]',
+  '[[5,11],[11,9],[9,8],[8,7]]',
   'completed',
   22
 FROM users u WHERE u.username = 'player2';

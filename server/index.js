@@ -11,6 +11,12 @@ import {
   getNetworkPlanning,
   listSegments,
 } from './dao/networkDao.js';
+import {
+  beginPlanning,
+  createGame,
+  getGame,
+  submitRoute,
+} from './dao/gameDao.js';
 
 const app = express();
 const port = 3001;
@@ -121,6 +127,97 @@ app.get('/api/network', isLoggedIn, async (req, res, next) => {
 app.get('/api/segments', isLoggedIn, async (req, res, next) => {
   try {
     res.json(await listSegments());
+  } catch (err) {
+    return next(err);
+  }
+});
+
+// --- Game APIs (exam: setup → planning → submit route → result) ---
+
+function parseGameId(req) {
+  const id = Number.parseInt(req.params.id, 10);
+  if (!Number.isInteger(id) || id < 1) return null;
+  return id;
+}
+
+/** Exam: route submitted as station ID pairs, not names (avoids typos). */
+function parseRouteBody(body) {
+  if (!body || !Array.isArray(body.segments)) return null;
+  const segments = [];
+  for (const leg of body.segments) {
+    if (!Array.isArray(leg) || leg.length !== 2) return null;
+    const [fromId, toId] = leg;
+    if (!Number.isInteger(fromId) || !Number.isInteger(toId)) return null;
+    segments.push([fromId, toId]);
+  }
+  return segments;
+}
+
+/** POST /api/games — new game in setup */
+app.post('/api/games', isLoggedIn, async (req, res, next) => {
+  try {
+    const game = await createGame(req.user.id);
+    return res.status(201).json(game);
+  } catch (err) {
+    return next(err);
+  }
+});
+
+/** POST /api/games/:id/planning — random start/dest, 90s timer starts */
+app.post('/api/games/:id/planning', isLoggedIn, async (req, res, next) => {
+  try {
+    const gameId = parseGameId(req);
+    if (!gameId) return res.status(400).json({ error: 'BAD_REQUEST' });
+
+    const outcome = await beginPlanning(gameId, req.user.id);
+    if (outcome.error === 'NOT_FOUND') {
+      return res.status(404).json({ error: 'NOT_FOUND' });
+    }
+    if (outcome.error === 'INVALID_STATE') {
+      return res.status(409).json({ error: 'INVALID_STATE' });
+    }
+    return res.json(outcome.game);
+  } catch (err) {
+    return next(err);
+  }
+});
+
+/** PUT /api/games/:id/route — validate + execute in one call; client animates returned steps[] */
+app.put('/api/games/:id/route', isLoggedIn, async (req, res, next) => {
+  try {
+    const gameId = parseGameId(req);
+    if (!gameId) return res.status(400).json({ error: 'BAD_REQUEST' });
+
+    const segments = parseRouteBody(req.body);
+    if (segments === null) return res.status(400).json({ error: 'BAD_REQUEST' });
+
+    const outcome = await submitRoute(gameId, req.user.id, segments);
+    if (outcome.error === 'NOT_FOUND') {
+      return res.status(404).json({ error: 'NOT_FOUND' });
+    }
+    if (outcome.error === 'INVALID_STATE') {
+      return res.status(409).json({ error: 'INVALID_STATE' });
+    }
+    if (outcome.error === 'PLANNING_EXPIRED') {
+      return res.status(409).json({ error: 'PLANNING_EXPIRED' });
+    }
+    return res.json(outcome.result);
+  } catch (err) {
+    return next(err);
+  }
+});
+
+/** GET /api/games/:id — current game state (owner only) */
+app.get('/api/games/:id', isLoggedIn, async (req, res, next) => {
+  try {
+    const gameId = parseGameId(req);
+    if (!gameId) return res.status(400).json({ error: 'BAD_REQUEST' });
+
+    const outcome = await getGame(gameId, req.user.id);
+    if (outcome.error === 'NOT_FOUND') {
+      return res.status(404).json({ error: 'NOT_FOUND' });
+    }
+    return res.json(outcome.game);
   } catch (err) {
     return next(err);
   }

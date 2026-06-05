@@ -33,6 +33,25 @@ GET {{baseUrl}}/api/network?view=planning
 ### All segment pairs
 GET {{baseUrl}}/api/segments
 
+### New game (setup)
+# @name newGame
+POST {{baseUrl}}/api/games
+
+### Begin planning (random start/dest, 90s deadline)
+# @name planning
+POST {{baseUrl}}/api/games/{{newGame.response.body.id}}/planning
+
+### Submit route (replace segments with a valid path for your start/dest)
+PUT {{baseUrl}}/api/games/{{newGame.response.body.id}}/route
+Content-Type: application/json
+
+{
+  "segments": [[1, 6], [6, 7], [7, 8], [8, 9]]
+}
+
+### Get game state
+GET {{baseUrl}}/api/games/{{newGame.response.body.id}}
+
 ### Logout
 DELETE {{baseUrl}}/api/sessions/current
 

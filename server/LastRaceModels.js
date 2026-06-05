@@ -27,13 +27,7 @@ function Line(id, name, stations) {
   this.stations = stations ?? [];
 }
 
-function Event(id, description, effect) {
-  this.id = id;
-  this.description = description;
-  this.effect = effect;
-}
-
-/** One leg during execution playback. */
+/** One leg during execution — client shows these one at a time from PUT /route steps[]. */
 function GameStep(order, fromStationId, toStationId, fromName, toName, event, coinsAfter) {
   this.order = order;
   this.fromStationId = fromStationId;
@@ -44,6 +38,7 @@ function GameStep(order, fromStationId, toStationId, fromName, toName, event, co
   this.coinsAfter = coinsAfter;
 }
 
+/** Game state for API — setup/planning use coins=20; completed uses finalScore elsewhere. */
 function Game(
   id,
   status,
@@ -64,4 +59,4 @@ function Game(
   this.planningDeadline = planningDeadline ?? null;
 }
 
-export { User, Station, Segment, Line, Event, GameStep, Game };
+export { User, Station, Segment, Line, GameStep, Game };
