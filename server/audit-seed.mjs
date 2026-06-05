@@ -25,83 +25,89 @@ if (!fs.existsSync(dbPath)) {
 
 const db = await openDb();
 
-const stations = await all(db, 'SELECT id, name FROM stations');
-const nameToId = Object.fromEntries(stations.map((s) => [s.name, s.id]));
-const idToName = Object.fromEntries(stations.map((s) => [s.id, s.name]));
-
 const segments = await all(
   db,
-  `SELECT seg.station_a_id, seg.station_b_id, s1.name AS a, s2.name AS b
-   FROM segments seg
-   JOIN stations s1 ON s1.id = seg.station_a_id
-   JOIN stations s2 ON s2.id = seg.station_b_id`
+  'SELECT station_a_id, station_b_id FROM segments'
 );
 const segmentSet = new Set(
   segments.map((s) => `${s.station_a_id}-${s.station_b_id}`)
 );
 
+function segmentKey(a, b) {
+  const lo = Math.min(a, b);
+  const hi = Math.max(a, b);
+  return `${lo}-${hi}`;
+}
+
 function hasSegment(a, b) {
-  const idA = nameToId[a];
-  const idB = nameToId[b];
-  const lo = Math.min(idA, idB);
-  const hi = Math.max(idA, idB);
-  return segmentSet.has(`${lo}-${hi}`);
+  return segmentSet.has(segmentKey(a, b));
 }
 
 const lineMembership = await all(
   db,
-  `SELECT l.name AS line, s.name AS station, sl.position
+  `SELECT l.id AS lineId, s.id AS stationId, sl.position
    FROM station_lines sl
    JOIN lines l ON l.id = sl.line_id
    JOIN stations s ON s.id = sl.station_id`
 );
 
-const stationLines = {};
+const stationLineCount = await all(
+  db,
+  `SELECT station_id AS id, COUNT(DISTINCT line_id) AS n
+   FROM station_lines
+   GROUP BY station_id`
+);
+const interchangeIds = new Set(
+  stationLineCount.filter((r) => r.n > 1).map((r) => r.id)
+);
+
+const byLine = {};
 for (const row of lineMembership) {
-  if (!stationLines[row.station]) stationLines[row.station] = new Set();
-  stationLines[row.station].add(row.line);
+  if (!byLine[row.lineId]) byLine[row.lineId] = [];
+  byLine[row.lineId].push(row);
 }
 
-function isInterchange(stationName) {
-  return (stationLines[stationName]?.size ?? 0) > 1;
-}
-
-function linesForSegment(a, b) {
-  const target = [a, b].sort().join('|'); // names for line adjacency pairs
+function linesForSegment(fromId, toId) {
+  const lo = Math.min(fromId, toId);
+  const hi = Math.max(fromId, toId);
   const result = new Set();
-  const byLine = {};
-  for (const row of lineMembership) {
-    if (!byLine[row.line]) byLine[row.line] = [];
-    byLine[row.line].push(row);
-  }
-  for (const line of Object.keys(byLine)) {
-    const ordered = byLine[line].sort((x, y) => x.position - y.position);
+  for (const lineId of Object.keys(byLine)) {
+    const ordered = byLine[lineId].sort((x, y) => x.position - y.position);
     for (let i = 0; i < ordered.length - 1; i++) {
-      const pair = [ordered[i].station, ordered[i + 1].station].sort().join('|');
-      if (pair === target) result.add(line);
+      const a = ordered[i].stationId;
+      const b = ordered[i + 1].stationId;
+      if (Math.min(a, b) === lo && Math.max(a, b) === hi) {
+        result.add(Number(lineId));
+      }
     }
   }
-  return [...result];
+  return result;
 }
 
 function validateRoute(game) {
   const route = JSON.parse(game.route_json);
   const issues = [];
-  const startName = idToName[game.start_station_id];
-  const destName = idToName[game.dest_station_id];
 
   if (route.length === 0) return ['empty route'];
 
   const [firstFrom] = route[0];
   const [, lastTo] = route[route.length - 1];
-  if (firstFrom !== startName) issues.push(`starts at ${firstFrom}, expected ${startName}`);
-  if (lastTo !== destName) issues.push(`ends at ${lastTo}, expected ${destName}`);
+  if (firstFrom !== game.start_station_id) {
+    issues.push(`starts at ${firstFrom}, expected ${game.start_station_id}`);
+  }
+  if (lastTo !== game.dest_station_id) {
+    issues.push(`ends at ${lastTo}, expected ${game.dest_station_id}`);
+  }
 
+  const usedSegments = new Set();
   let prevTo = null;
-  for (let i = 0; i < route.length; i++) {
-    const [from, to] = route[i];
+  for (const leg of route) {
+    const [from, to] = leg;
     if (!hasSegment(from, to)) issues.push(`unknown segment ${from}—${to}`);
-    if (i > 0 && from !== prevTo) issues.push(`gap: expected ${prevTo}, got ${from}`);
+    const key = segmentKey(from, to);
+    if (usedSegments.has(key)) issues.push(`duplicate segment ${key}`);
+    usedSegments.add(key);
+    if (prevTo !== null && from !== prevTo) issues.push(`gap: expected ${prevTo}, got ${from}`);
     prevTo = to;
   }
 
@@ -111,9 +117,11 @@ function validateRoute(game) {
     const [a1, b1] = route[i];
     const [a2, b2] = route[i + 1];
     if (a2 !== b1) continue;
-    const shared = linesForSegment(a1, b1).filter((l) => linesForSegment(a2, b2).includes(l));
-    if (shared.length === 0 && !isInterchange(b1)) {
-      issues.push(`illegal line change at ${b1}`);
+    const shared = [...linesForSegment(a1, b1)].filter((lineId) =>
+      linesForSegment(a2, b2).has(lineId)
+    );
+    if (shared.length === 0 && !interchangeIds.has(b1)) {
+      issues.push(`illegal line change at station ${b1}`);
     }
   }
 
@@ -121,17 +129,13 @@ function validateRoute(game) {
 }
 
 console.log('=== NETWORK ===\n');
-const byLine = {};
-for (const row of lineMembership) {
-  if (!byLine[row.line]) byLine[row.line] = [];
-  byLine[row.line].push(row);
-}
 let expectedCount = 0;
-for (const line of Object.keys(byLine)) {
-  const ordered = byLine[line].sort((x, y) => x.position - y.position);
+for (const lineId of Object.keys(byLine)) {
+  const ordered = byLine[lineId].sort((x, y) => x.position - y.position);
   for (let i = 0; i < ordered.length - 1; i++) {
     expectedCount++;
-    const [a, b] = [ordered[i].station, ordered[i + 1].station];
+    const a = ordered[i].stationId;
+    const b = ordered[i + 1].stationId;
     if (!hasSegment(a, b)) console.log('FAIL missing segment:', a, '—', b);
   }
 }
