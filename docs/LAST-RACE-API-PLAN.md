@@ -7,7 +7,7 @@
 
 This document is the **implementation plan** for the server APIs. The official `README.md` in the repo root will list the **final** endpoints when you submit; use this file while building.
 
-**Status:** Steps 0–4 done on `dev` · **Next:** ranking API (Step 5) + React UI.  
+**Status:** Steps 0–5 done on `dev` · **Next:** React UI (Steps 6–9).  
 **Spec sync:** aligned with professor’s update published **2026-06-05** (final exam text).
 
 ---

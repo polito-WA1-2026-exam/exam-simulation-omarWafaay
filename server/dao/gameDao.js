@@ -253,3 +253,23 @@ export async function submitRoute(gameId, userId, segments) {
     },
   };
 }
+
+/**
+ * GET /api/ranking — best score per user across all their completed games.
+ *
+ * Exam: registered users see a general ranking on a dedicated page.
+ * We only include users who finished at least one game; sort highest score first.
+ */
+export async function getRanking() {
+  const rows = await all(
+    `SELECT u.username, MAX(g.final_score) AS bestScore
+     FROM users u
+     JOIN games g ON g.user_id = u.id AND g.status = 'completed'
+     GROUP BY u.id
+     ORDER BY bestScore DESC, u.username ASC`
+  );
+  return rows.map((row) => ({
+    username: row.username,
+    bestScore: row.bestScore,
+  }));
+}

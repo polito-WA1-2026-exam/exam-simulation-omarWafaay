@@ -5,7 +5,7 @@
 **Work branch:** `dev`  
 **Submit on:** `main` + git tag `final` (deadline 2026-06-22)
 
-**You stopped after:** Step 4 (game APIs). **Next up:** Step 5 (ranking).
+**You stopped after:** Step 5 (ranking API). **Next up:** Step 6 (React skeleton).
 
 ---
 
@@ -19,8 +19,8 @@
 | 2 | Passport login/logout | ✅ Done |
 | 3 | Read APIs (network, segments) | ✅ Done |
 | 4 | Game lifecycle APIs + route validation | ✅ |
-| 5 | Ranking API | ⬜ Next |
-| 6 | React router + auth guard | ⬜ |
+| 5 | Ranking API | ✅ Done |
+| 6 | React router + auth guard | ⬜ Next |
 | 7 | Anonymous instructions (no map) | ⬜ |
 | 8 | Game UI (setup → planning → execution → result) | ⬜ |
 | 9 | Ranking page | ⬜ |
@@ -107,10 +107,11 @@ See [LAST-RACE-API-PLAN.md](./LAST-RACE-API-PLAN.md) §3–§10.
 
 ---
 
-## Step 5 — Ranking ⬜
+## Step 5 — Ranking ✅
 
-- [ ] `GET /api/ranking` — best score per user
-- [ ] Seed: player2 (22) above player1 (21)
+- [x] `GET /api/ranking` — best score per user
+- [x] Seed: player2 (22) above player1 (21)
+- [x] `server/verify-ranking.mjs`
 
 ---
 

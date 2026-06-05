@@ -15,6 +15,7 @@ import {
   beginPlanning,
   createGame,
   getGame,
+  getRanking,
   submitRoute,
 } from './dao/gameDao.js';
 
@@ -204,6 +205,15 @@ app.put('/api/games/:id/route', isLoggedIn, async (req, res, next) => {
       return res.status(409).json({ error: 'PLANNING_EXPIRED' });
     }
     return res.json(outcome.result);
+  } catch (err) {
+    return next(err);
+  }
+});
+
+// Leaderboard: each user's best completed game score, highest first.
+app.get('/api/ranking', isLoggedIn, async (req, res, next) => {
+  try {
+    res.json(await getRanking());
   } catch (err) {
     return next(err);
   }
