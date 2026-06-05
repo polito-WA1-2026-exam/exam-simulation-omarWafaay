@@ -139,30 +139,24 @@ export async function findValidRouteSegments(startStationId, destinationStationI
     return true;
   }
 
-  function visitedNodes(legs) {
-    const nodes = new Set([startStationId]);
-    for (const [fromId, toId] of legs) {
-      nodes.add(fromId);
-      nodes.add(toId);
-    }
-    return nodes;
-  }
-
-  function dfs(current, legs) {
+  // Exam: same station may repeat; each undirected segment may be used only once.
+  function dfs(current, legs, usedSegments) {
     if (current === destinationStationId && legs.length >= MIN_SEGMENTS) {
       return legs;
     }
     if (legs.length >= 14) return null;
 
-    const visited = visitedNodes(legs);
     for (const next of adj.get(current) ?? []) {
-      if (visited.has(next) && next !== destinationStationId) continue;
+      const key = segmentKey(current, next);
+      if (usedSegments.has(key)) continue;
       if (!legAllowed(legs, current, next)) continue;
-      const found = dfs(next, [...legs, [current, next]]);
+      const nextUsed = new Set(usedSegments);
+      nextUsed.add(key);
+      const found = dfs(next, [...legs, [current, next]], nextUsed);
       if (found) return found;
     }
     return null;
   }
 
-  return dfs(startStationId, []);
+  return dfs(startStationId, [], new Set());
 }
