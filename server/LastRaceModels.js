@@ -27,7 +27,8 @@ function Line(id, name, stations) {
   this.stations = stations ?? [];
 }
 
-/** One leg during execution — client shows these one at a time from PUT /route steps[]. */
+// One hop of the journey after a valid submit — React shows these from steps[] one by one.
+// event is just { description, effect } (no separate Event model; client never lists all events).
 function GameStep(order, fromStationId, toStationId, fromName, toName, event, coinsAfter) {
   this.order = order;
   this.fromStationId = fromStationId;
@@ -38,7 +39,8 @@ function GameStep(order, fromStationId, toStationId, fromName, toName, event, co
   this.coinsAfter = coinsAfter;
 }
 
-/** Game state for API — setup/planning use coins=20; completed uses finalScore elsewhere. */
+// What GET/POST game endpoints return. During setup/planning, coins is always 20.
+// After completion, responses use finalScore instead (see gameDao.getGame).
 function Game(
   id,
   status,

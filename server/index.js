@@ -132,15 +132,17 @@ app.get('/api/segments', isLoggedIn, async (req, res, next) => {
   }
 });
 
-// --- Game APIs (exam: setup → planning → submit route → result) ---
+// --- Game flow: setup → planning (90s) → submit route → result ---
+// Business logic is in gameDao + services; these handlers only parse HTTP and map errors.
 
+// :id in the URL must be a positive integer.
 function parseGameId(req) {
   const id = Number.parseInt(req.params.id, 10);
   if (!Number.isInteger(id) || id < 1) return null;
   return id;
 }
 
-/** Exam: route submitted as station ID pairs, not names (avoids typos). */
+// Body looks like { "segments": [[1, 6], [6, 7], ...] } — ids only, not station names.
 function parseRouteBody(body) {
   if (!body || !Array.isArray(body.segments)) return null;
   const segments = [];
@@ -153,7 +155,7 @@ function parseRouteBody(body) {
   return segments;
 }
 
-/** POST /api/games — new game in setup */
+// Player logged in, sees full map, has 20 coins — no start/dest yet.
 app.post('/api/games', isLoggedIn, async (req, res, next) => {
   try {
     const game = await createGame(req.user.id);
@@ -163,7 +165,7 @@ app.post('/api/games', isLoggedIn, async (req, res, next) => {
   }
 });
 
-/** POST /api/games/:id/planning — random start/dest, 90s timer starts */
+// Player ready: server assigns start + destination and returns planningDeadline.
 app.post('/api/games/:id/planning', isLoggedIn, async (req, res, next) => {
   try {
     const gameId = parseGameId(req);
@@ -182,7 +184,7 @@ app.post('/api/games/:id/planning', isLoggedIn, async (req, res, next) => {
   }
 });
 
-/** PUT /api/games/:id/route — validate + execute in one call; client animates returned steps[] */
+// Submit route (manual or timer). One response: valid/invalid, score, and all steps if valid.
 app.put('/api/games/:id/route', isLoggedIn, async (req, res, next) => {
   try {
     const gameId = parseGameId(req);
@@ -207,7 +209,7 @@ app.put('/api/games/:id/route', isLoggedIn, async (req, res, next) => {
   }
 });
 
-/** GET /api/games/:id — current game state (owner only) */
+// Reload game state; only the owner gets 200 (others get 404).
 app.get('/api/games/:id', isLoggedIn, async (req, res, next) => {
   try {
     const gameId = parseGameId(req);

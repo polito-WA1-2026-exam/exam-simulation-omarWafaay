@@ -1,6 +1,7 @@
 /**
- * Game lifecycle: create, planning, route submit, read back.
- * Orchestrates startDestPicker, routeValidator, and gameEngine (exam rules live there).
+ * Everything about playing a game lives here: create, start planning, submit route, read back.
+ * The actual exam rules (is the route OK? what score?) are in the service files —
+ * this file just talks to SQLite and ties the steps together.
  */
 import { all, get, run } from '../db.js';
 import { Game, GameStep } from '../LastRaceModels.js';
@@ -8,29 +9,36 @@ import { pickStartAndDestination } from '../services/startDestPicker.js';
 import { isValidRoute } from '../services/routeValidator.js';
 import { executeRoute, STARTING_COINS } from '../services/gameEngine.js';
 
-/** Exam: 90 seconds planning; client shows countdown from planningDeadline. */
+// The exam gives the player 90 seconds to plan. The React app shows a countdown;
+// we store when planning started and send back planningDeadline (= start + 90s).
 const PLANNING_SECONDS = 90;
-/** Our extension: reject PUT slightly after deadline (not in exam text). */
+
+// Small extra window after the deadline before we reject a late PUT.
+// Not required by the exam text — it stops someone submitting minutes later.
 const PLANNING_GRACE_MS = 5000;
 
+// Turn station rows into { 1: "Centrale", 6: "Fontana Oscura", ... } for API responses.
 async function getStationNames() {
   const rows = await all('SELECT id, name FROM stations');
   return Object.fromEntries(rows.map((r) => [r.id, r.name]));
 }
 
+// Client needs an ISO timestamp for the timer: when did planning start + 90s.
 function planningDeadlineFromRow(row) {
   if (!row.planning_started_at) return null;
   const start = new Date(row.planning_started_at);
   return new Date(start.getTime() + PLANNING_SECONDS * 1000).toISOString();
 }
 
+// True if the player waited too long after the deadline (deadline + 5s grace).
 function isPlanningExpired(row) {
   if (!row.planning_started_at) return false;
   const deadline = new Date(planningDeadlineFromRow(row));
   return Date.now() > deadline.getTime() + PLANNING_GRACE_MS;
 }
 
-/** Owner-only: wrong user gets null → HTTP 404 (do not leak other users' games). */
+// Load one game only if it belongs to this user. We return null for wrong owner
+// so the route handler can answer 404 — we never tell player2 that player1's game exists.
 async function loadOwnedGame(gameId, userId) {
   const row = await get(
     `SELECT g.*, sa.name AS start_name, sb.name AS dest_name
@@ -43,12 +51,15 @@ async function loadOwnedGame(gameId, userId) {
   return row ?? null;
 }
 
+// Build the JSON shape the client expects for setup / planning / completed.
 function toGameResponse(row, { includeSteps = false, steps = [] } = {}) {
   if (row.status === 'setup') {
+    // Setup: player sees the full map; no start/dest yet.
     return new Game(row.id, 'setup', STARTING_COINS, null, null, null, null, null);
   }
 
   if (row.status === 'planning') {
+    // Planning: include assigned stations (ids + names) and when time runs out.
     return new Game(
       row.id,
       'planning',
@@ -76,6 +87,7 @@ function toGameResponse(row, { includeSteps = false, steps = [] } = {}) {
   return { id: row.id, status: row.status };
 }
 
+// Read execution history from game_steps and wrap each row as a GameStep model.
 async function loadGameSteps(gameId) {
   const rows = await all(
     `SELECT gs.step_order AS "order",
@@ -108,7 +120,10 @@ async function loadGameSteps(gameId) {
   );
 }
 
-/** Exam setup phase: no start/dest yet (NULL in DB until planning). */
+/**
+ * POST /api/games — player is on the setup screen (full map, not playing yet).
+ * Start/dest stay NULL in the database until they call planning.
+ */
 export async function createGame(userId) {
   const { lastID } = await run(
     `INSERT INTO games (user_id, start_station_id, dest_station_id, status)
@@ -118,7 +133,10 @@ export async function createGame(userId) {
   return new Game(lastID, 'setup', STARTING_COINS, null, null, null, null, null);
 }
 
-/** Exam planning phase: server picks start/dest and starts the 90s window. */
+/**
+ * POST /api/games/:id/planning — player clicked "ready".
+ * Server picks random start + destination (at least 3 segments apart) and starts the clock.
+ */
 export async function beginPlanning(gameId, userId) {
   const row = await loadOwnedGame(gameId, userId);
   if (!row) return { error: 'NOT_FOUND' };
@@ -152,6 +170,10 @@ export async function beginPlanning(gameId, userId) {
   };
 }
 
+/**
+ * GET /api/games/:id — whatever the client needs for the current phase.
+ * Finished games also load steps from the DB so the result screen can replay them.
+ */
 export async function getGame(gameId, userId) {
   const row = await loadOwnedGame(gameId, userId);
   if (!row) return { error: 'NOT_FOUND' };
@@ -172,8 +194,13 @@ export async function getGame(gameId, userId) {
 }
 
 /**
- * Exam: validate on submit (after 90s or before). Invalid → score 0, no steps.
- * Valid → random event per leg, return all steps for client animation.
+ * PUT /api/games/:id/route — player submitted their route (or the timer auto-submitted).
+ *
+ * Flow:
+ *  1. Check game is in planning and not too late.
+ *  2. Ask routeValidator if the path is legal.
+ *  3a. Bad path → score 0, no game_steps, status completed (exam: lose all 20 coins).
+ *  3b. Good path → gameEngine runs events leg by leg, saves steps, returns them to React.
  */
 export async function submitRoute(gameId, userId, segments) {
   const row = await loadOwnedGame(gameId, userId);
@@ -189,6 +216,7 @@ export async function submitRoute(gameId, userId, segments) {
   });
 
   if (!valid) {
+    // Still save what they sent (for debugging / audit) but no execution.
     await run(
       `UPDATE games
        SET status = 'completed',

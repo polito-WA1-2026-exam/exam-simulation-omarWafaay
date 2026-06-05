@@ -1,20 +1,28 @@
 /**
- * Route validation for PUT /api/games/:id/route.
- * Exam (2026-06-05): correct start/end, real segments, line rules at interchanges,
- * each undirected segment at most once; same station may appear multiple times.
+ * Decides if the route the player submitted is legal.
+ *
+ * Exam rules (2026-06-05):
+ *  - starts at assigned start, ends at assigned destination
+ *  - every leg is a real segment in the database
+ *  - legs connect end-to-end
+ *  - you can only change line at interchange stations
+ *  - each physical segment (undirected) can be used at most once
+ *  - you MAY visit the same station again (loops) — we do not forbid that
  */
 import { all } from '../db.js';
 
-/** With our start/dest picker, shortest path is ≥3; submitted routes need at least 3 legs too. */
+// Our picker always assigns pairs at least 3 hops apart; a winning route needs ≥3 legs too.
 const MIN_SEGMENTS = 3;
 
-/** DB stores undirected edges; [1,6] and [6,1] are the same segment. */
+// In the DB a segment is always stored as the smaller id first.
+// So [1,6] and [6,1] are the same tunnel — one key for both directions.
 export function segmentKey(fromId, toId) {
   const lo = Math.min(fromId, toId);
   const hi = Math.max(fromId, toId);
   return `${lo}-${hi}`;
 }
 
+// Load everything we need from SQLite once per validation call.
 async function loadNetworkContext() {
   const segments = await all('SELECT station_a_id, station_b_id FROM segments');
   const segmentSet = new Set(
@@ -27,13 +35,14 @@ async function loadNetworkContext() {
      ORDER BY sl.line_id, sl.position`
   );
 
+  // Group stations by line so we can see who is next to whom on each line.
   const byLine = new Map();
   for (const row of lineRows) {
     if (!byLine.has(row.lineId)) byLine.set(row.lineId, []);
     byLine.get(row.lineId).push(row);
   }
 
-  /** Which metro lines contain this adjacent pair (consecutive on station_lines). */
+  // For a pair of adjacent stations, which line(s) contain that edge?
   const linesForSegment = (fromId, toId) => {
     const lo = Math.min(fromId, toId);
     const hi = Math.max(fromId, toId);
@@ -50,6 +59,7 @@ async function loadNetworkContext() {
     return result;
   };
 
+  // Interchange = station appears on more than one line.
   const interchangeRows = await all(
     `SELECT station_id AS id
      FROM station_lines
@@ -68,11 +78,13 @@ async function loadNetworkContext() {
 }
 
 /**
- * @returns {Promise<boolean>} true if route satisfies all exam rules
+ * Main check called from gameDao when the player submits a route.
+ * Returns true only if every rule passes.
  */
 export async function isValidRoute({ startStationId, destinationStationId, segments }) {
   const { hasSegment, linesForSegment, interchangeIds } = await loadNetworkContext();
 
+  // Empty or missing route (e.g. timeout with nothing selected).
   if (!Array.isArray(segments) || segments.length === 0) {
     return false;
   }
@@ -81,6 +93,7 @@ export async function isValidRoute({ startStationId, destinationStationId, segme
     return false;
   }
 
+  // First station and last station must match what we assigned.
   const [firstFrom] = segments[0];
   const lastLeg = segments[segments.length - 1];
   const lastTo = lastLeg[1];
@@ -89,6 +102,7 @@ export async function isValidRoute({ startStationId, destinationStationId, segme
     return false;
   }
 
+  // Walk the route leg by leg: exists? connects? not reusing a segment?
   const usedSegments = new Set();
   let prevTo = null;
   for (const leg of segments) {
@@ -101,15 +115,17 @@ export async function isValidRoute({ startStationId, destinationStationId, segme
     if (usedSegments.has(key)) return false;
     usedSegments.add(key);
 
+    // Each leg must start where the previous one ended.
     if (prevTo !== null && fromId !== prevTo) return false;
     prevTo = toId;
   }
 
-  // Line change at station b1: both legs must share a line, or b1 is an interchange.
+  // Where two legs meet at station b1: either stay on the same line or b1 is an interchange.
   for (let i = 0; i < segments.length - 1; i++) {
     const [a1, b1] = segments[i];
     const [a2, b2] = segments[i + 1];
     if (a2 !== b1) continue;
+
     const shared = [...linesForSegment(a1, b1)].filter((lineId) =>
       linesForSegment(a2, b2).has(lineId)
     );
@@ -121,7 +137,10 @@ export async function isValidRoute({ startStationId, destinationStationId, segme
   return true;
 }
 
-/** DFS helper for verify-games.mjs — not used in normal player flow. */
+/**
+ * Only used by verify-games.mjs to find *some* legal route for testing.
+ * Real players build their own path in the UI.
+ */
 export async function findValidRouteSegments(startStationId, destinationStationId) {
   const ctx = await loadNetworkContext();
   const segmentRows = await all('SELECT station_a_id, station_b_id FROM segments');
@@ -133,6 +152,7 @@ export async function findValidRouteSegments(startStationId, destinationStationI
     adj.get(b).add(a);
   }
 
+  // Would adding this leg break the line-change rule?
   function legAllowed(legs, fromId, toId) {
     if (!ctx.hasSegment(fromId, toId)) return false;
     if (legs.length === 0) return true;
@@ -144,6 +164,7 @@ export async function findValidRouteSegments(startStationId, destinationStationI
     return true;
   }
 
+  // Depth-first search: stations can repeat, segments cannot.
   function dfs(current, legs, usedSegments) {
     if (current === destinationStationId && legs.length >= MIN_SEGMENTS) {
       return legs;
@@ -154,6 +175,7 @@ export async function findValidRouteSegments(startStationId, destinationStationI
       const key = segmentKey(current, next);
       if (usedSegments.has(key)) continue;
       if (!legAllowed(legs, current, next)) continue;
+
       const nextUsed = new Set(usedSegments);
       nextUsed.add(key);
       const found = dfs(next, [...legs, [current, next]], nextUsed);

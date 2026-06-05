@@ -1,10 +1,13 @@
 /**
- * Random start and destination for a new planning phase.
- * Exam: dest reachable from start with at least 3 segments on the shortest path.
+ * When planning starts, the server must pick a random start station and destination.
+ *
+ * Exam rule: they must be reachable and the *shortest* path between them must use
+ * at least 3 segments (e.g. Centrale → Porta Velaria → Crocevia → Piazza = 3 segments, 4 stops).
  */
 import { all } from '../db.js';
 
-/** Undirected adjacency from segments table (station_a_id, station_b_id). */
+// Read all rows from segments and build a graph: station id → set of neighbour ids.
+// Segments are undirected, so we add both directions.
 function buildGraph(segmentRows) {
   const adj = new Map();
   const addEdge = (a, b) => {
@@ -19,7 +22,8 @@ function buildGraph(segmentRows) {
   return adj;
 }
 
-/** Shortest path length in edges (BFS). Returns -1 if unreachable. */
+// How many edges on the shortest path from start to dest? BFS.
+// Returns -1 if there is no path at all.
 function shortestPathLength(adj, start, dest) {
   if (start === dest) return 0;
   const queue = [[start, 0]];
@@ -38,8 +42,8 @@ function shortestPathLength(adj, start, dest) {
 }
 
 /**
- * Pick random pair until shortest path has ≥ 3 edges.
- * Example from exam: Centrale→Porta Velaria→Crocevia→Piazza = 3 segments, 4 stops.
+ * Keep drawing random pairs until we find one at least 3 hops apart.
+ * 500 tries is plenty for our seeded network.
  */
 export async function pickStartAndDestination() {
   const segments = await all('SELECT station_a_id, station_b_id FROM segments');
@@ -52,6 +56,7 @@ export async function pickStartAndDestination() {
     const start = ids[Math.floor(Math.random() * ids.length)];
     const dest = ids[Math.floor(Math.random() * ids.length)];
     if (dest === start) continue;
+
     const hops = shortestPathLength(adj, start, dest);
     if (hops >= 3) {
       return { startStationId: start, destinationStationId: dest };
