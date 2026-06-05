@@ -5,7 +5,7 @@
 **Work branch:** `dev`  
 **Submit on:** `main` + git tag `final` (deadline 2026-06-22)
 
-**You stopped after:** Step 3 (read APIs). **Next up:** Step 4 (game APIs).
+**You stopped after:** Step 4 (game APIs). **Next up:** Step 5 (ranking).
 
 ---
 
@@ -18,8 +18,8 @@
 | 1b | Seed audit + player1 score fix (21) | ✅ Done |
 | 2 | Passport login/logout | ✅ Done |
 | 3 | Read APIs (network, segments) | ✅ Done |
-| 4 | Game lifecycle APIs + route validation | ⬜ Next |
-| 5 | Ranking API | ⬜ |
+| 4 | Game lifecycle APIs + route validation | ✅ |
+| 5 | Ranking API | ⬜ Next |
 | 6 | React router + auth guard | ⬜ |
 | 7 | Anonymous instructions (no map) | ⬜ |
 | 8 | Game UI (setup → planning → execution → result) | ⬜ |
@@ -93,13 +93,15 @@ See [LAST-RACE-API-PLAN.md](./LAST-RACE-API-PLAN.md) §3–§10.
 
 ---
 
-## Step 4 — Game APIs ⬜
+## Step 4 — Game APIs ✅
 
-- [ ] `POST /api/games` — new game (`status: setup`)
-- [ ] `POST /api/games/:id/planning` — random start/dest (BFS, ≥3 hops)
-- [ ] `PUT /api/games/:id/route` — validate + execute + score
-- [ ] `routeValidator.js` + `gameEngine.js`
-- [ ] `GET /api/games/:id`
+- [x] `POST /api/games` — new game (`status: setup`)
+- [x] `POST /api/games/:id/planning` — random start/dest (BFS, ≥3 hops)
+- [x] `PUT /api/games/:id/route` — validate + execute + score
+- [x] `routeValidator.js` + `gameEngine.js` + `startDestPicker.js` + `gameDao.js`
+- [x] `GET /api/games/:id`
+- [x] `planning_started_at` in schema; seed `route_json` as ID pairs
+- [x] `server/verify-games.mjs`
 
 **Done when:** full game loop testable via curl/Postman.
 
@@ -134,7 +136,7 @@ See [LAST-RACE-API-PLAN.md](./LAST-RACE-API-PLAN.md) §3–§10.
 - [ ] **Planning:** map without lines; start/dest; segment list; **90s timer**; auto-submit on timeout
 - [ ] **Execution:** one step at a time (event + coins)
 - [ ] **Result:** final score; “new game”
-- [ ] UI: only allow next segment connected to route end (document in README)
+- [ ] Segment picker: exam allows **any** segment order (server validates on submit); optional UX to restrict to connected segments
 
 ---
 
@@ -171,6 +173,8 @@ See [LAST-RACE-API-PLAN.md](./LAST-RACE-API-PLAN.md) §11. Summary:
 | 90s planning | Client timer + server `planning_started_at` / deadline |
 | Registration | None — seed users only |
 | Negative score | Store and show as **0** |
+| Segment reuse | Each undirected segment **at most once**; same station may repeat (exam 2026-06-05) |
+| Route validity timing | Checked on `PUT /route` at submit / timeout, not during planning |
 
 ---
 

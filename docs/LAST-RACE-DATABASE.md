@@ -5,6 +5,8 @@ Branch: `dev`
 
 This document is the reference for `server/schema.sql` and `server/seed.sql`. Business rules (route validation, scoring) are enforced in Express; the DB stores data and history.
 
+**Route rules (exam 2026-06-05):** a valid route starts/ends at assigned stations; each leg exists on a line; line changes only at interchanges; **each undirected segment at most once**; the **same station may appear multiple times** (loops). See [LAST-RACE-API-PLAN.md](./LAST-RACE-API-PLAN.md) §7.
+
 API response objects are built in DAOs using constructor functions in [`server/LastRaceModels.js`](../server/LastRaceModels.js) (WA1 / `QAModels.js` style).
 
 ---
@@ -91,7 +93,7 @@ At least 8 events; effects in [-4, +4].
 
 `planning_started_at`: ISO datetime set when the game enters `planning`; used with a 90s server deadline (see [LAST-RACE-API-PLAN.md](./LAST-RACE-API-PLAN.md)).
 
-**Note:** Current seed still uses name-based `route_json` until Step 4 migration; update `seed.sql` and `audit-seed.mjs` when implementing game APIs.
+**Note:** Seed `route_json` uses station ID pairs (e.g. `[[1,6],[6,7]]`). `audit-seed.mjs` validates by ID.
 
 ---
 

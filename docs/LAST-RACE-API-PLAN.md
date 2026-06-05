@@ -7,7 +7,8 @@
 
 This document is the **implementation plan** for the server APIs. The official `README.md` in the repo root will list the **final** endpoints when you submit; use this file while building.
 
-**Status:** Steps 0–1 done · **Next:** implement APIs starting with auth (see §7).
+**Status:** Steps 0–4 done on `dev` · **Next:** ranking API (Step 5) + React UI.  
+**Spec sync:** aligned with professor’s update published **2026-06-05** (final exam text).
 
 ---
 
@@ -39,6 +40,8 @@ This document is the **implementation plan** for the server APIs. The official `
 | Invalid or incomplete route → **0 coins**, no execution | One validation path on submit |
 | Valid route → random event **per leg on server** | Client only **displays** steps returned by the API |
 | Final score = coins left; negative → **0** | Clamp before saving `games.final_score` |
+| **Each segment used at most once**; **same station may repeat** | Server rejects duplicate undirected edges; loops at stations allowed |
+| Planning: player may pick **any** segment pair | Server validates full route **on submit** (after 90s or before) |
 | No user registration | No `POST /api/users`; seed users only |
 | Do not leak data | No `password_hash`, no other users’ games |
 
@@ -295,7 +298,7 @@ Login
 |------|------|
 | `server/index.js` | Express, CORS, session, routes |
 | `server/middleware/isLoggedIn.js` | Return `401` if not authenticated |
-| `server/dao/userDao.js` | bcrypt login |
+| `server/dao/userDao.js` | scrypt login (WA1 week05 style) |
 | `server/LastRaceModels.js` | `User`, `Station`, `Segment`, `Line`, `Game`, … (WA1 constructor style) |
 | `server/dao/networkDao.js` | Full/planning network, segment list |
 | `server/dao/gameDao.js` | Games CRUD, ranking query |
@@ -320,10 +323,21 @@ Keep business rules in **services**, not in route handlers.
 | Each pair exists in `segments` table (by station ids) | `valid: false` |
 | Legs connect (`leg[i][1] === leg[i+1][0]`) | `valid: false` |
 | Line change only at interchange | `valid: false` |
+| **Same undirected segment used twice** (e.g. `[1,6]` then `[6,1]`) | `valid: false` |
 
-Validator works on **IDs** internally; adapt logic from `server/audit-seed.mjs` (update audit to use ids when seed migrates).
+Validator works on **IDs** internally; see `server/audit-seed.mjs` for seed route checks.
 
-**README note:** segment pairs are **undirected** in the DB; direction comes from order and assigned start. In planning, the UI should only allow segments whose `fromId` matches the **current route end**; the server still re-validates the full route.
+### Exam text (2026-06-05) — route validity
+
+> A route is valid when it starts and ends at the assigned stations and each segment is reachable through one of the lines, with line changes possible only at interchange stations. Routes may visit the **same station more than once**, but must **not use any segment more than once**.
+
+> Each segment may be selected only once. Before the 90 seconds expire, the player must submit the route; if time runs out, planning ends with the route built so far (even if incomplete or invalid).
+
+> During planning, the user may select **any** segment from the list — it is the player’s responsibility to build a consistent path (professor comment [l]). Validity is checked **on submit**, not while building.
+
+**Undirected segments:** pairs are stored with `station_a_id < station_b_id`; travel direction comes from route order and assigned start. `[fromId, toId]` and `[toId, fromId]` are the **same** segment for duplicate detection.
+
+**Planning UI (optional):** the client *may* restrict picks to segments connected to the current route end for usability, but the exam does **not** require it.
 
 ---
 
@@ -400,8 +414,12 @@ One commit per slice on `dev`.
 | 6 | API responses | **IDs + names** for display (network, segments, steps) |
 | 7 | `GET /api/segments` | **Required** (exam: list all segment pairs) |
 | 8 | `GET /api/games` (history) | **Not implemented** |
-| 9 | 90s planning | Client timer + `planning_started_at` / `planningDeadline`; server rejects late `PUT` after ~5s grace |
+| 9 | 90s planning | Client timer + `planning_started_at` / `planningDeadline`; server rejects late `PUT` after ~5s grace *(grace period is our extension, not in exam text)* |
 | 10 | `GET /api/db-check` | Dev-only until submit |
+| 11 | Segment reuse | **At most once** per undirected segment; station loops allowed |
+| 12 | Map rendering | Static image or HTML — student choice (exam comment [d]) |
+| 13 | Execution map | Dynamic path on map **not required** (exam comment [t]) |
+| 14 | Segment list order | Alphabetical or shuffled — no exam mandate; we sort by `fromId`, `toId` |
 
 ### Schema change when implementing games (Step 4)
 
