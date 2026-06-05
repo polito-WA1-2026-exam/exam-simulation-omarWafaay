@@ -1,6 +1,6 @@
 @baseUrl = http://localhost:3001
-# Run requests in order so the session cookie is reused (VS Code REST Client).
-# Or run: node verify-auth-api.mjs (starts its own server)
+# Run requests top-to-bottom so the session cookie is reused (VS Code REST Client / IntelliJ).
+# Full automated run: node run-test-http.mjs
 
 ### Health (public)
 GET {{baseUrl}}/api/health
@@ -8,7 +8,7 @@ GET {{baseUrl}}/api/health
 ### DB check without login — expect 401
 GET {{baseUrl}}/api/db-check
 
-### Login player1
+### Login (test file uses player2)
 # @name login
 POST {{baseUrl}}/api/sessions
 Content-Type: application/json
@@ -41,16 +41,22 @@ POST {{baseUrl}}/api/games
 # @name planning
 POST {{baseUrl}}/api/games/{{newGame.response.body.id}}/planning
 
-### Submit route (replace segments with a valid path for your start/dest)
+# Planning assigned: start={{planning.response.body.startStationId}} ({{planning.response.body.start}})
+#                   dest={{planning.response.body.destinationStationId}} ({{planning.response.body.destination}})
+# Before the next request, generate a valid route for THIS game (nodemon must be running):
+#   node print-route-for-game.mjs {{newGame.response.body.id}}
+
+### Submit route (reads route-body.json generated above)
 PUT {{baseUrl}}/api/games/{{newGame.response.body.id}}/route
 Content-Type: application/json
 
-{
-  "segments": [[1, 6], [6, 7], [7, 8], [8, 9]]
-}
+< route-body.json
 
 ### Get game state
 GET {{baseUrl}}/api/games/{{newGame.response.body.id}}
+
+### Ranking (best score per user)
+GET {{baseUrl}}/api/ranking
 
 ### Logout
 DELETE {{baseUrl}}/api/sessions/current
