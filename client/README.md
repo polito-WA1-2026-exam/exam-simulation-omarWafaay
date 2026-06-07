@@ -1,16 +1,34 @@
-# React + Vite
+# Last Race — React client
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Single-page app for the **Last Race** exam project (React 19 + Vite).
 
-Currently, two official plugins are available:
+## Run
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+```powershell
+npm install
+npm run dev
+```
 
-## React Compiler
+App: `http://localhost:5173` — requires the API server on `http://localhost:3001`.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Documentation
 
-## Expanding the ESLint configuration
+| Doc | Content |
+|-----|---------|
+| [docs/LAST-RACE-CLIENT-STEP6.md](../docs/LAST-RACE-CLIENT-STEP6.md) | **Step 6 trace guide** — routing, auth, guards, how to verify |
+| [docs/LAST-RACE-BACKLOG.md](../docs/LAST-RACE-BACKLOG.md) | Full task list (Steps 6–10) |
+| [docs/LAST-RACE-API-PLAN.md](../docs/LAST-RACE-API-PLAN.md) | Server API shapes the client will call |
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Source layout (Step 6)
+
+```text
+src/
+  api/client.js           HTTP helper (credentials: 'include')
+  auth/                   Session context + useAuth
+  components/             Navbar, ProtectedRoute, GuestRoute
+  pages/                  One file per route
+  App.jsx                 Route table
+  layout.css              Layout styles (restyle without touching logic)
+```
+
+Steps 8–9 will extend `pages/GamePage.jsx` and `pages/RankingPage.jsx`.

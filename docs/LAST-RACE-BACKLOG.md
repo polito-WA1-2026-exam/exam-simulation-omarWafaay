@@ -5,7 +5,7 @@
 **Work branch:** `dev`  
 **Submit on:** `main` + git tag `final` (deadline 2026-06-22)
 
-**You stopped after:** Step 5 (ranking API). **Next up:** Step 6 (React skeleton).
+**You stopped after:** Step 6 (React skeleton). **Next up:** Step 7 (anonymous UI polish) / Step 8 (game UI).
 
 ---
 
@@ -20,8 +20,8 @@
 | 3 | Read APIs (network, segments) | ✅ Done |
 | 4 | Game lifecycle APIs + route validation | ✅ |
 | 5 | Ranking API | ✅ Done |
-| 6 | React router + auth guard | ⬜ Next |
-| 7 | Anonymous instructions (no map) | ⬜ |
+| 6 | React router + auth guard | ✅ Done |
+| 7 | Anonymous instructions (no map) | ⬜ Next |
 | 8 | Game UI (setup → planning → execution → result) | ⬜ |
 | 9 | Ranking page | ⬜ |
 | 10 | README, screenshots, submission | ⬜ |
@@ -115,12 +115,18 @@ See [LAST-RACE-API-PLAN.md](./LAST-RACE-API-PLAN.md) §3–§10.
 
 ---
 
-## Step 6 — React skeleton ⬜
+## Step 6 — React skeleton ✅
 
-- [ ] `react-router-dom`
-- [ ] Routes: `/`, `/login`, `/game`, `/ranking` (adjust as needed)
-- [ ] `Navbar`, auth context or session hook
-- [ ] Redirect: anonymous → instructions; logged-in → game/home
+- [x] `react-router-dom`
+- [x] Routes: `/`, `/login`, `/game`, `/ranking`
+- [x] `Navbar`, `AuthProvider` + `useAuth`
+- [x] `ProtectedRoute` / `GuestRoute` guards
+- [x] Placeholder `GamePage` + `RankingPage`
+- [x] `api/client.js` with `credentials: 'include'`
+
+**Verify:** login `player2`/`password` → Play + Ranking; logout → Login only; `/game` redirects when logged out.
+
+**Trace guide:** [LAST-RACE-CLIENT-STEP6.md](./LAST-RACE-CLIENT-STEP6.md)
 
 ---
 
@@ -206,6 +212,7 @@ node audit-seed.mjs
 
 - Exam spec: [Google Doc](https://docs.google.com/document/d/1BGYMlO-N-1K5XSe3Km8nR4JsYLAY6xPQkcvT8evvfoE/edit)
 - **API plan:** `docs/LAST-RACE-API-PLAN.md`
+- **Client Step 6 guide:** `docs/LAST-RACE-CLIENT-STEP6.md`
 - DB design: `docs/LAST-RACE-DATABASE.md`
 - Method: `docs/WEB-PROJECT-PLANNING-GUIDE.md`
 
