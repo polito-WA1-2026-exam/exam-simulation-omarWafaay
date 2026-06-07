@@ -61,7 +61,7 @@
 
 **Verify:** `node verify-db.mjs` and `node audit-seed.mjs` (restart server first if DB is stale).
 
-**Users (seed):** `player1` / `player2` / `player3` — password `password`
+**Users (seed):** `Omar` / `Paolo` / `Francesca` — password `password`
 
 ---
 
@@ -110,7 +110,7 @@ See [LAST-RACE-API-PLAN.md](./LAST-RACE-API-PLAN.md) §3–§10.
 ## Step 5 — Ranking ✅
 
 - [x] `GET /api/ranking` — best score per user
-- [x] Seed: player2 (22) above player1 (21)
+- [x] Seed: Paolo (22) above Omar (21)
 - [x] `server/verify-ranking.mjs`
 
 ---
@@ -124,7 +124,7 @@ See [LAST-RACE-API-PLAN.md](./LAST-RACE-API-PLAN.md) §3–§10.
 - [x] Placeholder `GamePage` + `RankingPage`
 - [x] `api/client.js` with `credentials: 'include'`
 
-**Verify:** login `player2`/`password` → Play + Ranking; logout → Login only; `/game` redirects when logged out.
+**Verify:** login `Paolo`/`password` → Play + Ranking; logout → Login only; `/game` redirects when logged out.
 
 **Trace guide:** [LAST-RACE-CLIENT-STEP6.md](./LAST-RACE-CLIENT-STEP6.md)
 
@@ -160,7 +160,7 @@ See [LAST-RACE-API-PLAN.md](./LAST-RACE-API-PLAN.md) §3–§10.
 - [x] Current user row highlighted; empty + error states
 - [ ] Screenshot for README (ranking page) — Step 10
 
-**Verify:** login → `/ranking` → player2 (22) above player1 (21); no player3.
+**Verify:** login → `/ranking` → Paolo (22) above Omar (21); no Francesca.
 
 ---
 

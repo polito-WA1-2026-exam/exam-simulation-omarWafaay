@@ -8,13 +8,13 @@ GET {{baseUrl}}/api/health
 ### DB check without login — expect 401
 GET {{baseUrl}}/api/db-check
 
-### Login (test file uses player2)
+### Login (test file uses Paolo)
 # @name login
 POST {{baseUrl}}/api/sessions
 Content-Type: application/json
 
 {
-  "username": "player2",
+  "username": "Paolo",
   "password": "password"
 }
 

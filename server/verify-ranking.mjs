@@ -69,20 +69,20 @@ try {
     fail(`anonymous ranking → ${anon.status} / ${anon.json?.error}`);
   } else ok('GET /api/ranking without login → 401 UNAUTHORIZED');
 
-  const cookie = await login('player1');
+  const cookie = await login('Omar');
   const ranking = await request('GET', '/api/ranking', { cookie });
 
   if (ranking.status !== 200) fail(`ranking → ${ranking.status}`);
   else if (!Array.isArray(ranking.json)) fail('ranking must be a JSON array');
   else if (ranking.json.length !== 2) {
     fail(`expected 2 ranked users from seed, got ${ranking.json.length}`);
-  } else if (ranking.json[0].username !== 'player2' || ranking.json[0].bestScore !== 22) {
-    fail(`first place should be player2/22, got ${JSON.stringify(ranking.json[0])}`);
-  } else if (ranking.json[1].username !== 'player1' || ranking.json[1].bestScore !== 21) {
-    fail(`second place should be player1/21, got ${JSON.stringify(ranking.json[1])}`);
-  } else if (ranking.json.some((r) => r.username === 'player3')) {
-    fail('player3 has no completed games and should be omitted');
-  } else ok('GET /api/ranking → player2 (22) above player1 (21)');
+  } else if (ranking.json[0].username !== 'Paolo' || ranking.json[0].bestScore !== 22) {
+    fail(`first place should be Paolo/22, got ${JSON.stringify(ranking.json[0])}`);
+  } else if (ranking.json[1].username !== 'Omar' || ranking.json[1].bestScore !== 21) {
+    fail(`second place should be Omar/21, got ${JSON.stringify(ranking.json[1])}`);
+  } else if (ranking.json.some((r) => r.username === 'Francesca')) {
+    fail('Francesca has no completed games and should be omitted');
+  } else ok('GET /api/ranking → Paolo (22) above Omar (21)');
 } catch (e) {
   fail(e.message);
 } finally {

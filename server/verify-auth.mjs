@@ -5,15 +5,15 @@ await initDb();
 
 let failed = false;
 
-const okUser = await getUser('player1', 'password');
-if (!okUser || okUser.username !== 'player1') {
-  console.log('FAIL: player1/password should login');
+const okUser = await getUser('Omar', 'password');
+if (!okUser || okUser.username !== 'Omar') {
+  console.log('FAIL: Omar/password should login');
   failed = true;
 } else {
-  console.log('OK: player1/password');
+  console.log('OK: Omar/password');
 }
 
-const bad = await getUser('player1', 'wrong');
+const bad = await getUser('Omar', 'wrong');
 if (bad !== false) {
   console.log('FAIL: wrong password should return false');
   failed = true;

@@ -87,9 +87,9 @@ At least 8 events; effects in [-4, +4].
 
 | username | password | Notes |
 |----------|----------|--------|
-| `player1` | `password` | Two **completed** games (best score **21**) |
-| `player2` | `password` | One **completed** game (score **22**) |
-| `player3` | `password` | No completed games (for ranking contrast) |
+| `Omar` | `password` | Two **completed** games (best score **21**) |
+| `Paolo` | `password` | One **completed** game (score **22**) |
+| `Francesca` | `password` | No completed games (for ranking contrast) |
 
 `route_json` format: JSON array of `[fromStationId, toStationId]` integer pairs in travel order, e.g. `[[1,6],[6,7]]`. Names are resolved via `stations` when needed for display.
 

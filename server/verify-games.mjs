@@ -357,7 +357,7 @@ try {
 
 
 
-  const cookie = await login('player1');
+  const cookie = await login('Omar');
 
 
 
@@ -751,7 +751,7 @@ try {
 
   // -------------------------------------------------------------------------
 
-  const cookie2 = await login('player2');
+  const cookie2 = await login('Paolo');
 
   const other = await request('GET', `/api/games/${gameId}`, { cookie: cookie2 });
 

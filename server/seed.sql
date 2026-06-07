@@ -83,11 +83,11 @@ INSERT INTO events (description, effect) VALUES
 
 -- password = scrypt(plain, salt, 16) as hex (see scripts/generate-user-seed.mjs)
 INSERT INTO users (username, password, salt) VALUES
-  ('player1', '0082c7cb58611b309c54e8eed9de140e', '9d4b8f925ca5e3a54440287b2dc0c9bc'),
-  ('player2', '960f7cfb98d4cee7b3fabdd4bff015fa', '81ecb808cee07c1bfb6e7d93a9071cf3'),
-  ('player3', '622f4edfdc6d56ed71943213f9e657a5', 'ce9dcd1fbcfa1155c77b312b5089cdc2');
+  ('Omar', '0082c7cb58611b309c54e8eed9de140e', '9d4b8f925ca5e3a54440287b2dc0c9bc'),
+  ('Paolo', '960f7cfb98d4cee7b3fabdd4bff015fa', '81ecb808cee07c1bfb6e7d93a9071cf3'),
+  ('Francesca', '622f4edfdc6d56ed71943213f9e657a5', 'ce9dcd1fbcfa1155c77b312b5089cdc2');
 
--- player1: completed games (best score 21)
+-- Omar: completed games (best score 21)
 INSERT INTO games (user_id, start_station_id, dest_station_id, route_json, status, final_score)
 SELECT
   u.id,
@@ -96,7 +96,7 @@ SELECT
   '[[1,6],[6,7],[7,8],[8,9]]',
   'completed',
   21
-FROM users u WHERE u.username = 'player1';
+FROM users u WHERE u.username = 'Omar';
 
 INSERT INTO games (user_id, start_station_id, dest_station_id, route_json, status, final_score)
 SELECT
@@ -106,9 +106,9 @@ SELECT
   '[[1,2],[2,6],[6,10],[10,11],[11,12]]',
   'completed',
   12
-FROM users u WHERE u.username = 'player1';
+FROM users u WHERE u.username = 'Omar';
 
--- player2: completed game (score 22)
+-- Paolo: completed game (score 22)
 INSERT INTO games (user_id, start_station_id, dest_station_id, route_json, status, final_score)
 SELECT
   u.id,
@@ -117,9 +117,9 @@ SELECT
   '[[5,11],[11,12],[12,9],[9,8],[8,7]]',
   'completed',
   22
-FROM users u WHERE u.username = 'player2';
+FROM users u WHERE u.username = 'Paolo';
 
--- Execution steps for player1 best game (final_score 21)
+-- Execution steps for Omar best game (final_score 21)
 INSERT INTO game_steps (game_id, step_order, from_station_id, to_station_id, event_id, coins_after)
 SELECT
   g.id, 1,
@@ -129,7 +129,7 @@ SELECT
   20
 FROM games g
 JOIN users u ON u.id = g.user_id
-WHERE u.username = 'player1' AND g.final_score = 21;
+WHERE u.username = 'Omar' AND g.final_score = 21;
 
 INSERT INTO game_steps (game_id, step_order, from_station_id, to_station_id, event_id, coins_after)
 SELECT
@@ -140,7 +140,7 @@ SELECT
   21
 FROM games g
 JOIN users u ON u.id = g.user_id
-WHERE u.username = 'player1' AND g.final_score = 21;
+WHERE u.username = 'Omar' AND g.final_score = 21;
 
 INSERT INTO game_steps (game_id, step_order, from_station_id, to_station_id, event_id, coins_after)
 SELECT
@@ -151,7 +151,7 @@ SELECT
   19
 FROM games g
 JOIN users u ON u.id = g.user_id
-WHERE u.username = 'player1' AND g.final_score = 21;
+WHERE u.username = 'Omar' AND g.final_score = 21;
 
 INSERT INTO game_steps (game_id, step_order, from_station_id, to_station_id, event_id, coins_after)
 SELECT
@@ -162,4 +162,4 @@ SELECT
   21
 FROM games g
 JOIN users u ON u.id = g.user_id
-WHERE u.username = 'player1' AND g.final_score = 21;
+WHERE u.username = 'Omar' AND g.final_score = 21;

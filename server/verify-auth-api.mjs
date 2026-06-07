@@ -101,7 +101,7 @@ try {
   }
 
   const badLogin = await request('POST', '/api/sessions', {
-    body: { username: 'player1', password: 'wrong' },
+    body: { username: 'Omar', password: 'wrong' },
   });
   if (badLogin.status !== 401) {
     fail(`POST /api/sessions wrong password → ${badLogin.status}`);
@@ -110,11 +110,11 @@ try {
   }
 
   const login = await request('POST', '/api/sessions', {
-    body: { username: 'player1', password: 'password' },
+    body: { username: 'Omar', password: 'password' },
   });
   if (login.status !== 201) {
     fail(`POST /api/sessions → ${login.status} ${JSON.stringify(login.json)}`);
-  } else if (login.json?.username !== 'player1' || !login.json?.id) {
+  } else if (login.json?.username !== 'Omar' || !login.json?.id) {
     fail(`POST /api/sessions body ${JSON.stringify(login.json)}`);
   } else {
     ok('POST /api/sessions → 201 + user');
@@ -129,7 +129,7 @@ try {
   const current = await request('GET', '/api/sessions/current', {
     cookie: login.cookie,
   });
-  if (current.status !== 200 || current.json?.username !== 'player1') {
+  if (current.status !== 200 || current.json?.username !== 'Omar') {
     fail(
       `GET /api/sessions/current with cookie → ${current.status} ${JSON.stringify(current.json)}`
     );

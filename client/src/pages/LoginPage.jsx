@@ -73,7 +73,7 @@ export default function LoginPage() {
         </form>
 
         <p className="seed-hint">
-          Demo accounts: <code>player1</code>, <code>player2</code>, <code>player3</code>{' '}
+          Demo accounts: <code>Omar</code>, <code>Paolo</code>, <code>Francesca</code>{' '}
           — password <code>password</code>
         </p>
 

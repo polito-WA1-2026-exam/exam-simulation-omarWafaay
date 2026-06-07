@@ -199,7 +199,7 @@ Then trace:
 - [ ] Navbar (anonymous) — Instructions + Login only  
 - [ ] Visit `/game` — redirect to `/login`  
 - [ ] Visit `/ranking` — redirect to `/login`  
-- [ ] Login `player2` / `password` — `POST /api/sessions` → `201`; land on `/game`  
+- [ ] Login `Paolo` / `password` — `POST /api/sessions` → `201`; land on `/game`  
 - [ ] Navbar (logged in) — Play, Ranking, Instructions, Logout  
 - [ ] `/game` and `/ranking` — placeholders; no game API calls yet  
 - [ ] Refresh while logged in — session still valid  

@@ -55,7 +55,7 @@ try {
   else ok('GET /api/network without login → 401');
 
   const login = await request('POST', '/api/sessions', {
-    body: { username: 'player1', password: 'password' },
+    body: { username: 'Omar', password: 'password' },
   });
   if (!login.cookie) fail('login cookie missing');
 

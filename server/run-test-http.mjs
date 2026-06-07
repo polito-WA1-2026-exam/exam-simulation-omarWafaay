@@ -67,10 +67,10 @@ try {
       expect: (r) => r.status === 401,
     },
     {
-      label: 'POST /api/sessions (player2)',
+      label: 'POST /api/sessions (Paolo)',
       run: () =>
         request('POST', '/api/sessions', {
-          body: { username: 'player2', password: 'password' },
+          body: { username: 'Paolo', password: 'password' },
         }),
       expect: (r) => r.status === 201 && r.cookie,
       after: (r) => {
@@ -80,7 +80,7 @@ try {
     {
       label: 'GET /api/sessions/current',
       run: () => request('GET', '/api/sessions/current', { cookie }),
-      expect: (r) => r.status === 200 && r.json?.username === 'player2',
+      expect: (r) => r.status === 200 && r.json?.username === 'Paolo',
     },
     {
       label: 'GET /api/db-check (with session)',
@@ -144,13 +144,13 @@ try {
       run: () => request('GET', '/api/ranking', { cookie }),
       expect: (r) => {
         if (r.status !== 200 || !Array.isArray(r.json) || r.json.length < 1) return false;
-        if (r.json[0].username !== 'player2' || typeof r.json[0].bestScore !== 'number') {
+        if (r.json[0].username !== 'Paolo' || typeof r.json[0].bestScore !== 'number') {
           return false;
         }
         for (let i = 1; i < r.json.length; i++) {
           if (r.json[i].bestScore > r.json[i - 1].bestScore) return false;
         }
-        return !r.json.some((row) => row.username === 'player3');
+        return !r.json.some((row) => row.username === 'Francesca');
       },
     },
     {
