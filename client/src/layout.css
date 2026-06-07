@@ -94,6 +94,23 @@
   margin-top: 0.5rem;
 }
 
+.instructions-layout {
+  display: grid;
+  grid-template-columns: 1fr 280px;
+  gap: 2rem;
+  align-items: start;
+}
+
+@media (max-width: 768px) {
+  .instructions-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+.instructions-main {
+  min-width: 0;
+}
+
 .instructions-list,
 .rules-list {
   margin: 0 0 1.25rem;
@@ -104,6 +121,37 @@
 .instructions-list li,
 .rules-list li {
   margin-bottom: 0.5rem;
+}
+
+.rules-sidebar {
+  padding: 1rem 1.25rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--code-bg);
+}
+
+.rules-sidebar h2 {
+  font-size: 1.1rem;
+  margin: 0 0 0.75rem;
+}
+
+.anonymous-note {
+  font-size: 0.95rem;
+  color: var(--text);
+  margin-bottom: 1.25rem;
+  padding: 0.75rem 1rem;
+  border-left: 3px solid #2563eb;
+  background: var(--accent-bg);
+}
+
+.instructions-cta {
+  margin-top: 0.5rem;
+}
+
+.instructions-cta .btn-primary {
+  display: inline-block;
+  text-decoration: none;
+  text-align: center;
 }
 
 .hint {
@@ -133,12 +181,16 @@
   margin-top: 1rem;
 }
 
+.login-sub {
+  margin: 0 0 1rem;
+  font-size: 0.95rem;
+  color: var(--text);
+}
+
 .login-form label {
-  display: flex;
-  flex-direction: column;
-  gap: 0.35rem;
   font-size: 0.9rem;
   color: var(--text-h);
+  margin-top: 0.25rem;
 }
 
 .login-form input {
@@ -179,4 +231,13 @@
   margin-top: 1.25rem;
   font-size: 0.85rem;
   color: var(--text);
+}
+
+.login-back {
+  margin-top: 1rem;
+  font-size: 0.9rem;
+}
+
+.login-back a {
+  color: #2563eb;
 }

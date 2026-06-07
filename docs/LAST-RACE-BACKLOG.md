@@ -5,7 +5,7 @@
 **Work branch:** `dev`  
 **Submit on:** `main` + git tag `final` (deadline 2026-06-22)
 
-**You stopped after:** Step 6 (React skeleton). **Next up:** Step 7 (anonymous UI polish) / Step 8 (game UI).
+**You stopped after:** Step 7 (anonymous UI). **Next up:** Step 8 (game UI).
 
 ---
 
@@ -21,8 +21,8 @@
 | 4 | Game lifecycle APIs + route validation | ✅ |
 | 5 | Ranking API | ✅ Done |
 | 6 | React router + auth guard | ✅ Done |
-| 7 | Anonymous instructions (no map) | ⬜ Next |
-| 8 | Game UI (setup → planning → execution → result) | ⬜ |
+| 7 | Anonymous instructions (no map) | ✅ Done |
+| 8 | Game UI (setup → planning → execution → result) | ⬜ Next |
 | 9 | Ranking page | ⬜ |
 | 10 | README, screenshots, submission | ⬜ |
 
@@ -130,10 +130,15 @@ See [LAST-RACE-API-PLAN.md](./LAST-RACE-API-PLAN.md) §3–§10.
 
 ---
 
-## Step 7 — Anonymous UI ⬜
+## Step 7 — Anonymous UI ✅
 
-- [ ] Instructions page only — **no network map** for logged-out users
-- [ ] Login form
+- [x] Instructions page — static rules + phases; **no** `GET /api/network` (exam: anonymous no map)
+- [x] `GameRules` sidebar — exam rules (20 coins, segments once, 90s, etc.)
+- [x] CTA: anonymous → Log in; logged-in → Go to Play
+- [x] Login form — controlled inputs, client + server validation, demo credentials hint
+- [x] Link back to instructions from login
+
+**Verify:** logged out on `/` — no network requests except `GET /api/sessions/current`; map never shown.
 
 ---
 
