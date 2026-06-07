@@ -5,7 +5,7 @@
 **Work branch:** `dev`  
 **Submit on:** `main` + git tag `final` (deadline 2026-06-22)
 
-**You stopped after:** Step 7 (anonymous UI). **Next up:** Step 8 (game UI).
+**You stopped after:** Step 8 (game UI). **Next up:** Step 9 (ranking page).
 
 ---
 
@@ -22,8 +22,8 @@
 | 5 | Ranking API | ✅ Done |
 | 6 | React router + auth guard | ✅ Done |
 | 7 | Anonymous instructions (no map) | ✅ Done |
-| 8 | Game UI (setup → planning → execution → result) | ⬜ Next |
-| 9 | Ranking page | ⬜ |
+| 8 | Game UI (setup → planning → execution → result) | ✅ Done |
+| 9 | Ranking page | ⬜ Next |
 | 10 | README, screenshots, submission | ⬜ |
 
 ---
@@ -142,13 +142,15 @@ See [LAST-RACE-API-PLAN.md](./LAST-RACE-API-PLAN.md) §3–§10.
 
 ---
 
-## Step 8 — Game UI ⬜
+## Step 8 — Game UI ✅
 
-- [ ] **Setup:** full map (lines + connections)
-- [ ] **Planning:** map without lines; start/dest; segment list; **90s timer**; auto-submit on timeout
-- [ ] **Execution:** one step at a time (event + coins)
-- [ ] **Result:** final score; “new game”
-- [ ] Segment picker: exam allows **any** segment order (server validates on submit); optional UX to restrict to connected segments
+- [x] **Setup:** `GET /api/network?view=full` — lines + segment list
+- [x] **Planning:** stations only; start/dest; segment picker; **90s timer**; auto-submit at deadline
+- [x] **Execution:** one step at a time from `steps[]`
+- [x] **Result:** final score; invalid → 0; Play again + link to ranking
+- [x] Route builder: immutable array updates; duplicate segments disabled in UI (server still validates)
+
+**Verify:** full play on `/game` — setup → planning → submit → execution → result.
 
 ---
 
