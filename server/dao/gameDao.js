@@ -13,10 +13,6 @@ import { executeRoute, STARTING_COINS } from '../services/gameEngine.js';
 // we store when planning started and send back planningDeadline (= start + 90s).
 const PLANNING_SECONDS = 90;
 
-// Small extra window after the deadline before we reject a late PUT.
-// Not required by the exam text — it stops someone submitting minutes later.
-const PLANNING_GRACE_MS = 5000;
-
 // Turn station rows into { 1: "Centrale", 6: "Fontana Oscura", ... } for API responses.
 async function getStationNames() {
   const rows = await all('SELECT id, name FROM stations');
@@ -30,11 +26,11 @@ function planningDeadlineFromRow(row) {
   return new Date(start.getTime() + PLANNING_SECONDS * 1000).toISOString();
 }
 
-// True if the player waited too long after the deadline (deadline + 5s grace).
+// True once the 90s window has passed (exam: no submissions after the deadline).
 function isPlanningExpired(row) {
   if (!row.planning_started_at) return false;
   const deadline = new Date(planningDeadlineFromRow(row));
-  return Date.now() > deadline.getTime() + PLANNING_GRACE_MS;
+  return Date.now() > deadline.getTime();
 }
 
 // Load one game only if it belongs to this user. We return null for wrong owner

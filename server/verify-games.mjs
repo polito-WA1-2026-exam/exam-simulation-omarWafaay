@@ -793,11 +793,7 @@ try {
 
   // 12. Late submission after planning window
 
-  //     Exam §5: "reject PUT if now is more than ~5s after planningDeadline"
-
-  //             → 409 { error: "PLANNING_EXPIRED" }
-
-  //     Exam §7: "PUT after planning deadline + grace → 409 PLANNING_EXPIRED"
+  //     Exam: reject PUT after planningDeadline → 409 { error: "PLANNING_EXPIRED" }
 
   //     Game must remain in planning (not scored).
 

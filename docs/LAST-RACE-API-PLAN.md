@@ -288,7 +288,7 @@ Login
 
 **90s timeout:** the client calls `PUT .../route` before `planningDeadline` with the partial route built so far. The server uses the same validation; incomplete routes → `valid: false`, `finalScore: 0`.
 
-**Server deadline:** reject `PUT` if now is **more than ~5s after** `planningDeadline` (abuse / forgot to submit) → `409` `{ "error": "PLANNING_EXPIRED" }`. Submissions within the window (including at 90s) are processed normally.
+**Server deadline:** reject `PUT` if now is **after** `planningDeadline` → `409` `{ "error": "PLANNING_EXPIRED" }`. Submissions at or before the deadline are processed normally (client auto-submits on timeout).
 
 ---
 
@@ -316,7 +316,7 @@ Keep business rules in **services**, not in route handlers.
 
 | Check | If it fails |
 |--------|-------------|
-| `PUT` after planning deadline + grace | `409 PLANNING_EXPIRED` |
+| `PUT` after planning deadline | `409 PLANNING_EXPIRED` |
 | Route non-empty (for “complete” intent) | `valid: false` |
 | First leg `fromId === startStationId` | `valid: false` |
 | Last leg `toId === destinationStationId` | `valid: false` |
@@ -371,7 +371,7 @@ Save `start_station_id`, `dest_station_id`, and `planning_started_at` when enter
 | Wrong credentials | `401` | `{ "error": "INVALID_CREDENTIALS" }` |
 | Game not found / not owner | `404` | `{ "error": "NOT_FOUND" }` |
 | Wrong game phase (e.g. planning twice) | `409` | `{ "error": "INVALID_STATE" }` |
-| `PUT /route` after deadline + grace | `409` | `{ "error": "PLANNING_EXPIRED" }` |
+| `PUT /route` after deadline | `409` | `{ "error": "PLANNING_EXPIRED" }` |
 | Malformed body (non-integer ids) | `400` | `{ "error": "BAD_REQUEST" }` |
 | Invalid route on submit | `200` | `{ "valid": false, "finalScore": 0, ... }` |
 
@@ -414,7 +414,7 @@ One commit per slice on `dev`.
 | 6 | API responses | **IDs + names** for display (network, segments, steps) |
 | 7 | `GET /api/segments` | **Required** (exam: list all segment pairs) |
 | 8 | `GET /api/games` (history) | **Not implemented** |
-| 9 | 90s planning | Client timer + `planning_started_at` / `planningDeadline`; server rejects late `PUT` after ~5s grace *(grace period is our extension, not in exam text)* |
+| 9 | 90s planning | Client timer + `planning_started_at` / `planningDeadline`; server rejects `PUT` strictly after deadline (no grace) |
 | 10 | `GET /api/db-check` | Dev-only until submit |
 | 11 | Segment reuse | **At most once** per undirected segment; station loops allowed |
 | 12 | Map rendering | Static image or HTML — student choice (exam comment [d]) |

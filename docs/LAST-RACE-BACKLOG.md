@@ -171,7 +171,7 @@ See [LAST-RACE-API-PLAN.md](./LAST-RACE-API-PLAN.md) §11. Summary:
 | Segment pairs | Undirected; direction from route order + assigned start |
 | `GET /api/segments` | **Yes** (exam requirement) |
 | `GET /api/games` list | **No** |
-| 90s planning | Client timer + server `planning_started_at` / deadline |
+| 90s planning | Client timer + server `planning_started_at` / deadline; no grace after 90s |
 | Registration | None — seed users only |
 | Negative score | Store and show as **0** |
 | Segment reuse | Each undirected segment **at most once**; same station may repeat (exam 2026-06-05) |
