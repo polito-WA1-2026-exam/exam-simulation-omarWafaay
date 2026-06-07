@@ -62,7 +62,7 @@ try {
   const full = await request('GET', '/api/network?view=full', { cookie: login.cookie });
   if (full.status !== 200) fail(`full network → ${full.status}`);
   else if (full.json?.lines?.length !== 4) fail(`expected 4 lines, got ${full.json?.lines?.length}`);
-  else if (full.json?.segments?.length !== 15) fail(`expected 15 segments, got ${full.json?.segments?.length}`);
+  else if (full.json?.segments?.length !== 14) fail(`expected 14 segments, got ${full.json?.segments?.length}`);
   else if (!full.json.lines[0].stations?.length) fail('line missing stations');
   else ok('GET /api/network?view=full');
 
@@ -79,7 +79,7 @@ try {
 
   const segments = await request('GET', '/api/segments', { cookie: login.cookie });
   if (segments.status !== 200) fail(`segments → ${segments.status}`);
-  else if (segments.json?.segments?.length !== 15) fail(`segments count ${segments.json?.segments?.length}`);
+  else if (segments.json?.segments?.length !== 14) fail(`segments count ${segments.json?.segments?.length}`);
   else if (!segments.json.segments[0].fromId || !segments.json.segments[0].from) {
     fail('segment missing id or name');
   } else ok('GET /api/segments');

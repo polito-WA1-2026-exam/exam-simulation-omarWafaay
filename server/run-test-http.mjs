@@ -100,7 +100,7 @@ try {
     {
       label: 'GET /api/segments',
       run: () => request('GET', '/api/segments', { cookie }),
-      expect: (r) => r.status === 200 && r.json?.segments?.length === 15,
+      expect: (r) => r.status === 200 && r.json?.segments?.length === 14,
     },
     {
       label: 'POST /api/games',

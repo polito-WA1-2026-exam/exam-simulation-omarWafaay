@@ -26,7 +26,7 @@ import { fileURLToPath } from 'url';
 
 import { attachToExistingDb, get, run } from './db.js';
 
-import { findValidRouteSegments } from './services/routeValidator.js';
+import { findValidRouteSegments, isValidRoute } from './services/routeValidator.js';
 
 
 
@@ -570,6 +570,38 @@ try {
     }
 
   }
+
+
+
+  // -------------------------------------------------------------------------
+
+  // 7a. Station loop allowed (exam 2026-06-05: same station may repeat)
+
+  //     Porta Velaria appears twice; no segment is reused.
+
+  // -------------------------------------------------------------------------
+
+  const loopRoute = [
+
+    [2, 1],
+
+    [1, 6],
+
+    [6, 2],
+
+    [2, 3],
+
+    [3, 4],
+
+    [4, 5],
+
+  ];
+
+  if (!(await isValidRoute({ startStationId: 2, destinationStationId: 5, segments: loopRoute }))) {
+
+    fail('station loop route should be valid (Porta revisited, no duplicate segment)');
+
+  } else ok('station loop route accepted (same station twice, segments once)');
 
 
 

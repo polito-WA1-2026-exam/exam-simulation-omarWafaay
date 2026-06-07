@@ -51,7 +51,7 @@
 ## Step 1 — Database ✅
 
 - [x] `server/schema.sql` (8 tables)
-- [x] `server/seed.sql` (4 lines, 12 stations, 7 interchanges, 8 events, 3 users)
+- [x] `server/seed.sql` (4 lines, 12 stations, 6 interchanges ≤50%, 8 events, 3 users)
 - [x] `server/db.js` — recreate DB on startup
 - [x] `docs/LAST-RACE-DATABASE.md`
 - [x] `GET /api/db-check` (dev helper)

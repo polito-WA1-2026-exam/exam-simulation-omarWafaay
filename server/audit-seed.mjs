@@ -128,7 +128,20 @@ function validateRoute(game) {
   return issues;
 }
 
-console.log('=== NETWORK ===\n');
+const stationCount = (await all(db, 'SELECT COUNT(*) AS n FROM stations'))[0].n;
+const interchangeCount = interchangeIds.size;
+const maxInterchanges = Math.floor(stationCount / 2);
+if (interchangeCount > maxInterchanges) {
+  console.log(
+    `FAIL interchange cap: ${interchangeCount} interchanges > ${maxInterchanges} (half of ${stationCount})`
+  );
+} else {
+  console.log(
+    `OK interchange cap: ${interchangeCount} interchanges (max ${maxInterchanges} for ${stationCount} stations)`
+  );
+}
+
+console.log('\n=== NETWORK ===\n');
 let expectedCount = 0;
 for (const lineId of Object.keys(byLine)) {
   const ordered = byLine[lineId].sort((x, y) => x.position - y.position);

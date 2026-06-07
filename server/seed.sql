@@ -53,18 +53,16 @@ INSERT INTO station_lines (line_id, station_id, position)
 SELECT (SELECT id FROM lines WHERE name = 'Green Line'), (SELECT id FROM stations WHERE name = 'Stazione Lago'), 2;
 INSERT INTO station_lines (line_id, station_id, position)
 SELECT (SELECT id FROM lines WHERE name = 'Green Line'), (SELECT id FROM stations WHERE name = 'Torre Cinerea'), 3;
-INSERT INTO station_lines (line_id, station_id, position)
-SELECT (SELECT id FROM lines WHERE name = 'Green Line'), (SELECT id FROM stations WHERE name = 'Campo dell''Eco'), 4;
 
--- Yellow Line
+-- Yellow Line (Campo dell'Eco is Yellow-only so interchange count stays at 6/12)
 INSERT INTO station_lines (line_id, station_id, position)
 SELECT (SELECT id FROM lines WHERE name = 'Yellow Line'), (SELECT id FROM stations WHERE name = 'Piazza delle Lanterne'), 0;
 INSERT INTO station_lines (line_id, station_id, position)
 SELECT (SELECT id FROM lines WHERE name = 'Yellow Line'), (SELECT id FROM stations WHERE name = 'Torre Cinerea'), 1;
 INSERT INTO station_lines (line_id, station_id, position)
-SELECT (SELECT id FROM lines WHERE name = 'Yellow Line'), (SELECT id FROM stations WHERE name = 'Viale dei Mosaici'), 2;
+SELECT (SELECT id FROM lines WHERE name = 'Yellow Line'), (SELECT id FROM stations WHERE name = 'Campo dell''Eco'), 2;
 INSERT INTO station_lines (line_id, station_id, position)
-SELECT (SELECT id FROM lines WHERE name = 'Yellow Line'), (SELECT id FROM stations WHERE name = 'Campo dell''Eco'), 3;
+SELECT (SELECT id FROM lines WHERE name = 'Yellow Line'), (SELECT id FROM stations WHERE name = 'Viale dei Mosaici'), 3;
 
 -- Segments from consecutive stations on each line
 INSERT OR IGNORE INTO segments (station_a_id, station_b_id)
@@ -116,7 +114,7 @@ SELECT
   u.id,
   (SELECT id FROM stations WHERE name = 'Piazza delle Lanterne'),
   (SELECT id FROM stations WHERE name = 'Borgo Sereno'),
-  '[[5,11],[11,9],[9,8],[8,7]]',
+  '[[5,11],[11,12],[12,9],[9,8],[8,7]]',
   'completed',
   22
 FROM users u WHERE u.username = 'player2';

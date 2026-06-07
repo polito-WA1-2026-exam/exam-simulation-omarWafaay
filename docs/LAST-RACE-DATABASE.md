@@ -53,12 +53,14 @@ Fictional network inspired by the exam example (names are student-defined).
 |------|---------------------|
 | **Red Line** | Centrale → Porta Velaria → Crocevia del Falco → Mercato Vecchio → Piazza delle Lanterne |
 | **Blue Line** | Centrale → Fontana Oscura → Borgo Sereno → Colle Antico → Viale dei Mosaici |
-| **Green Line** | Porta Velaria → Fontana Oscura → Stazione Lago → Torre Cinerea → Campo dell'Eco |
-| **Yellow Line** | Piazza delle Lanterne → Torre Cinerea → Viale dei Mosaici → Campo dell'Eco |
+| **Green Line** | Porta Velaria → Fontana Oscura → Stazione Lago → Torre Cinerea |
+| **Yellow Line** | Piazza delle Lanterne → Torre Cinerea → Campo dell'Eco → Viale dei Mosaici |
 
-**Counts (seed):** 4 lines, 12 stations, 7 interchange stations (≥3 required).
+**Counts (seed):** 4 lines, 12 stations, **6** interchange stations (≥3 required, ≤ half of 12).
 
-**Interchange stations:** Centrale, Porta Velaria, Fontana Oscura, Piazza delle Lanterne, Torre Cinerea, Viale dei Mosaici, Campo dell'Eco.
+**Interchange stations:** Centrale, Porta Velaria, Fontana Oscura, Piazza delle Lanterne, Torre Cinerea, Viale dei Mosaici.
+
+**Not an interchange:** Campo dell'Eco (Yellow Line only).
 
 **Segments:** one row per consecutive pair on each line (undirected, IDs stored with `station_a_id < station_b_id`).
 

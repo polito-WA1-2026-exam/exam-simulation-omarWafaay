@@ -25,10 +25,17 @@ const completedByUser = await all(
    ORDER BY u.username`
 );
 
+const maxInterchanges = Math.floor(stationCount / 2);
+
 const checks = [
   ['lines >= 4', lineCount >= 4, lineCount],
   ['stations >= 12', stationCount >= 12, stationCount],
   ['interchanges >= 3', interchanges.length >= 3, interchanges.length],
+  [
+    `interchanges <= half of stations (${maxInterchanges})`,
+    interchanges.length <= maxInterchanges,
+    interchanges.length,
+  ],
   ['segments > 0', segmentCount > 0, segmentCount],
   ['events >= 8', eventCount >= 8, eventCount],
   ['users >= 3', userCount >= 3, userCount],
