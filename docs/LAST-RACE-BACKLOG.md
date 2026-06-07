@@ -5,7 +5,7 @@
 **Work branch:** `dev`  
 **Submit on:** `main` + git tag `final` (deadline 2026-06-22)
 
-**You stopped after:** Step 8 (game UI). **Next up:** Step 9 (ranking page).
+**You stopped after:** Step 9 (ranking page). **Next up:** Step 10 (README, screenshots, submission).
 
 ---
 
@@ -23,8 +23,8 @@
 | 6 | React router + auth guard | ✅ Done |
 | 7 | Anonymous instructions (no map) | ✅ Done |
 | 8 | Game UI (setup → planning → execution → result) | ✅ Done |
-| 9 | Ranking page | ⬜ Next |
-| 10 | README, screenshots, submission | ⬜ |
+| 9 | Ranking page | ✅ Done |
+| 10 | README, screenshots, submission | ⬜ Next |
 
 ---
 
@@ -154,10 +154,13 @@ See [LAST-RACE-API-PLAN.md](./LAST-RACE-API-PLAN.md) §3–§10.
 
 ---
 
-## Step 9 — Ranking page ⬜
+## Step 9 — Ranking page ✅
 
-- [ ] Table/list from `GET /api/ranking`
-- [ ] Screenshot for README (ranking page)
+- [x] Table from `GET /api/ranking` (#, username, bestScore)
+- [x] Current user row highlighted; empty + error states
+- [ ] Screenshot for README (ranking page) — Step 10
+
+**Verify:** login → `/ranking` → player2 (22) above player1 (21); no player3.
 
 ---
 

@@ -459,3 +459,37 @@
 .btn-secondary:hover {
   border-color: #2563eb;
 }
+
+/* --- Ranking (Step 9) --- */
+
+.ranking-table {
+  width: 100%;
+  max-width: 480px;
+  border-collapse: collapse;
+  margin-top: 1rem;
+  text-align: left;
+}
+
+.ranking-table th,
+.ranking-table td {
+  padding: 0.6rem 0.75rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.ranking-table th {
+  font-weight: 600;
+  color: var(--text-h);
+}
+
+.ranking-table td:last-child {
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+}
+
+.ranking-row-self {
+  background: var(--accent-bg);
+}
+
+.ranking-row-self td:first-child {
+  font-weight: 600;
+}

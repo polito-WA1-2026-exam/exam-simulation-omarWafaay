@@ -26,3 +26,7 @@ export function fetchNetworkPlanning() {
 export function fetchSegments() {
   return apiFetch('/api/segments');
 }
+
+export function fetchRanking() {
+  return apiFetch('/api/ranking');
+}
