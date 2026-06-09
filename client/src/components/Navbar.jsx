@@ -20,17 +20,16 @@ export default function Navbar() {
         </NavLink>
 
         <nav className="header-nav">
-          
           {user ? (
             <>
+              <NavLink to="/" className={linkClass}>
+                Instructions
+              </NavLink>
               <NavLink to="/game" className={linkClass}>
                 Play
               </NavLink>
               <NavLink to="/ranking" className={linkClass}>
                 Ranking
-              </NavLink>
-              <NavLink to="/" className={linkClass}>
-                Instructions
               </NavLink>
             </>
           ) : (
