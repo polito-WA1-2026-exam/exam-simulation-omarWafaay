@@ -110,7 +110,7 @@ See [LAST-RACE-API-PLAN.md](./LAST-RACE-API-PLAN.md) §3–§10.
 ## Step 5 — Ranking ✅
 
 - [x] `GET /api/ranking` — best score per user
-- [x] Seed: Paolo (22) above Omar (21)
+- [x] Seed: Omar (22), Paolo (21), Francesca (18), Marco (15); Alice & Giulia omitted
 - [x] `server/verify-ranking.mjs`
 
 ---
@@ -160,7 +160,7 @@ See [LAST-RACE-API-PLAN.md](./LAST-RACE-API-PLAN.md) §3–§10.
 - [x] Current user row highlighted; empty + error states
 - [ ] Screenshot for README (ranking page) — Step 10
 
-**Verify:** login → `/ranking` → Paolo (22) above Omar (21); no users without completed games.
+**Verify:** login → `/ranking` → Omar (22), Paolo (21), Francesca (18), Marco (15); Alice & Giulia absent.
 
 ---
 

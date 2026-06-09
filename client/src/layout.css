@@ -1,14 +1,35 @@
 /* --- Shell & header (Mini Metro: light, minimal, transit accents) --- */
 
+/* background map (fixed behind everything) */
+.map-bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 0;
+  background: var(--bg);
+  pointer-events: none;
+}
+
+.map-svg {
+  width: 110%;
+  height: 110%;
+  margin: -5%;
+  opacity: 0.14;
+}
+
 .app-shell {
+  position: relative;
   min-height: 100svh;
   display: flex;
   flex-direction: column;
-  background: var(--bg);
 }
 
 .app-header {
-  background: var(--bg-panel);
+  position: relative;
+  z-index: 1;
+  background: rgba(255, 255, 255, 0.92);
   border-bottom: 1px solid var(--border);
   box-shadow: 0 1px 0 rgba(255, 255, 255, 0.8) inset;
 }
@@ -99,6 +120,8 @@
 }
 
 .app-main {
+  position: relative;
+  z-index: 1; /* above the map */
   flex: 1;
   max-width: 1100px;
   width: 100%;

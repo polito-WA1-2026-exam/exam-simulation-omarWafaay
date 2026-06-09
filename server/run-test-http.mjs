@@ -144,15 +144,13 @@ try {
       run: () => request('GET', '/api/ranking', { cookie }),
       expect: (r) => {
         if (r.status !== 200 || !Array.isArray(r.json) || r.json.length < 1) return false;
-        if (r.json[0].username !== 'Paolo' || typeof r.json[0].bestScore !== 'number') {
+        if (r.json[0].username !== 'Omar' || r.json[0].bestScore !== 22) {
           return false;
         }
         for (let i = 1; i < r.json.length; i++) {
           if (r.json[i].bestScore > r.json[i - 1].bestScore) return false;
         }
-        return !r.json.some((row) =>
-          ['Francesca', 'Alice', 'Marco', 'Giulia'].includes(row.username)
-        );
+        return !r.json.some((row) => ['Alice', 'Giulia'].includes(row.username));
       },
     },
     {

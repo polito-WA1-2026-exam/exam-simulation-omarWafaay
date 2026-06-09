@@ -1,5 +1,6 @@
 import { Navigate, Route, Routes } from 'react-router-dom';
 import Navbar from './components/Navbar.jsx';
+import SubwayMapBackground from './components/SubwayMapBackground.jsx';
 import GuestRoute from './components/GuestRoute.jsx';
 import ProtectedRoute from './components/ProtectedRoute.jsx';
 import GamePage from './pages/GamePage.jsx';
@@ -11,6 +12,7 @@ import './layout.css';
 export default function App() {
   return (
     <div className="app-shell">
+      <SubwayMapBackground />
       <Navbar />
       <main className="app-main">
         <Routes>

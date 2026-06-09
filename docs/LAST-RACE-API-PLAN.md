@@ -261,8 +261,10 @@ Return the fields needed for the current phase. Only the owner may access the ga
 
 ```json
 [
-  { "username": "Paolo", "bestScore": 22 },
-  { "username": "Omar", "bestScore": 21 }
+  { "username": "Omar", "bestScore": 22 },
+  { "username": "Paolo", "bestScore": 21 },
+  { "username": "Francesca", "bestScore": 18 },
+  { "username": "Marco", "bestScore": 15 }
 ]
 ```
 
@@ -387,7 +389,7 @@ Use `200` + `valid: false` for bad routes so the client can show “score 0” w
 | **B** | `GET /api/network`, `GET /api/segments` | `401` when logged out; JSON when logged in |
 | **C** | `POST /api/games`, `POST .../planning` | New game; start/dest at least 3 hops apart |
 | **D** | `routeValidator` + `PUT .../route` | Valid route → `steps`; bad route → `finalScore: 0` |
-| **E** | `GET /api/games/:id`, `GET /api/ranking` | Ranking: Paolo (22) above Omar (21) |
+| **E** | `GET /api/games/:id`, `GET /api/ranking` | Ranking: Omar (22) above Paolo (21); top 3 medals + Marco 4th |
 | **F** | `server/test.http` | Repeatable manual checks |
 
 One commit per slice on `dev`.

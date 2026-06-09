@@ -77,7 +77,7 @@ export default function RankingPage() {
 
   return (
     <div className="page ranking-page">
-      <h1>Ranking</h1>
+      <h1>Leaderboard</h1>
       <p className="phase-hint">Best score per player — coins left after a completed run.</p>
 
       {rows.length === 0 ? (

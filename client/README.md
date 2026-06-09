@@ -15,20 +15,21 @@ App: `http://localhost:5173` — requires the API server on `http://localhost:30
 
 | Doc | Content |
 |-----|---------|
-| [docs/LAST-RACE-CLIENT-STEP6.md](../docs/LAST-RACE-CLIENT-STEP6.md) | **Step 6 trace guide** — routing, auth, guards, how to verify |
+| [docs/LAST-RACE-CLIENT-GUIDE.md](../docs/LAST-RACE-CLIENT-GUIDE.md) | **Client workbook** — file map, game flow, “if you want to change X…” |
+| [docs/LAST-RACE-CLIENT-STEP6.md](../docs/LAST-RACE-CLIENT-STEP6.md) | Step 6 trace guide — routing, auth, guards |
 | [docs/LAST-RACE-BACKLOG.md](../docs/LAST-RACE-BACKLOG.md) | Full task list (Steps 6–10) |
-| [docs/LAST-RACE-API-PLAN.md](../docs/LAST-RACE-API-PLAN.md) | Server API shapes the client will call |
+| [docs/LAST-RACE-API-PLAN.md](../docs/LAST-RACE-API-PLAN.md) | Server API shapes the client calls |
 
-## Source layout (Step 6)
+## Source layout
 
 ```text
 src/
-  api/client.js           HTTP helper (credentials: 'include')
+  api/                    apiFetch + game API wrappers
   auth/                   Session context + useAuth
-  components/             Navbar, ProtectedRoute, GuestRoute
-  pages/                  One file per route
+  pages/                  Instructions, Login, Game, Ranking
+  components/             Navbar, guards, game phases, icons
+  utils/                  lineColor, segmentKey
   App.jsx                 Route table
-  layout.css              Layout styles (restyle without touching logic)
+  index.css               Colours & fonts
+  layout.css              Page layout & components styles
 ```
-
-Steps 8–9 will extend `pages/GamePage.jsx` and `pages/RankingPage.jsx`.

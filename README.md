@@ -67,7 +67,7 @@ Errors: `404` · `409` (wrong state or planning expired)
 Success `200`: game object · `404` if not found or not owner
 
 **`GET /api/ranking`** — leaderboard  
-Success `200`: `[{ "username": "Paolo", "bestScore": 22 }, ...]` sorted by score descending; only users with completed games
+Success `200`: `[{ "username": "Omar", "bestScore": 22 }, ...]` sorted by score descending; only users with completed games
 
 ---
 
@@ -133,7 +133,7 @@ Do this once before submission (browser at `http://localhost:5173`, both servers
    - Windows: `Win + Shift + S` → save as PNG in `img/`
 3. **Ranking screenshot** (`img/ranking.png`)
    - Open **Ranking**
-   - Capture table: Paolo 1st (gold), Omar 2nd (silver), coin icons visible
+   - Capture table: Omar 1st (gold), Paolo 2nd, Francesca 3rd (bronze), Marco 4th; coin icons visible
 4. **Update this README** — uncomment/fix image paths above if filenames differ
 5. **Quick check** — log out: `/game` and `/ranking` must redirect to login
 
@@ -143,11 +143,11 @@ Do this once before submission (browser at `http://localhost:5173`, both servers
 
 | Username | Password | Notes |
 |----------|----------|--------|
-| `Omar` | `password` | Best score **21** (seed) |
-| `Paolo` | `password` | Best score **22** (seed) |
-| `Francesca` | `password` | No completed games |
+| `Omar` | `password` | Best score **22** (seed) |
+| `Paolo` | `password` | Best score **21** (seed) |
+| `Francesca` | `password` | Best score **18** (seed) |
+| `Marco` | `password` | Best score **15** (seed) |
 | `Alice` | `password` | No completed games |
-| `Marco` | `password` | No completed games |
 | `Giulia` | `password` | No completed games |
 
 ---

@@ -91,15 +91,15 @@ INSERT INTO users (username, password, salt) VALUES
   ('Marco', 'acdaa8373d0fed1952d4a20fb1dc35ff', '98439ed8fa7447a981c708c83fe218eb'),
   ('Giulia', 'f1298e0e205d1cedcec1ac418254193f', 'f27f193868394ec4530e6bc35a615aa5');
 
--- Omar: completed games (best score 21)
+-- Omar: completed games (best score 22)
 INSERT INTO games (user_id, start_station_id, dest_station_id, route_json, status, final_score)
 SELECT
   u.id,
-  (SELECT id FROM stations WHERE name = 'Green Park'),
-  (SELECT id FROM stations WHERE name = 'Notting Hill'),
-  '[[1,6],[6,7],[7,8],[8,9]]',
+  (SELECT id FROM stations WHERE name = 'Covent Garden'),
+  (SELECT id FROM stations WHERE name = 'Harrods'),
+  '[[5,11],[11,12],[12,9],[9,8],[8,7]]',
   'completed',
-  21
+  22
 FROM users u WHERE u.username = 'Omar';
 
 INSERT INTO games (user_id, start_station_id, dest_station_id, route_json, status, final_score)
@@ -112,18 +112,98 @@ SELECT
   12
 FROM users u WHERE u.username = 'Omar';
 
--- Paolo: completed game (score 22)
+-- Paolo: completed game (score 21)
 INSERT INTO games (user_id, start_station_id, dest_station_id, route_json, status, final_score)
 SELECT
   u.id,
-  (SELECT id FROM stations WHERE name = 'Covent Garden'),
-  (SELECT id FROM stations WHERE name = 'Harrods'),
-  '[[5,11],[11,12],[12,9],[9,8],[8,7]]',
+  (SELECT id FROM stations WHERE name = 'Green Park'),
+  (SELECT id FROM stations WHERE name = 'Notting Hill'),
+  '[[1,6],[6,7],[7,8],[8,9]]',
   'completed',
-  22
+  21
 FROM users u WHERE u.username = 'Paolo';
 
--- Execution steps for Omar best game (final_score 21)
+-- Francesca: completed game (score 18) — bronze on ranking
+INSERT INTO games (user_id, start_station_id, dest_station_id, route_json, status, final_score)
+SELECT
+  u.id,
+  (SELECT id FROM stations WHERE name = 'Green Park'),
+  (SELECT id FROM stations WHERE name = 'Trafalgar Square'),
+  '[[1,2],[2,3],[3,4]]',
+  'completed',
+  18
+FROM users u WHERE u.username = 'Francesca';
+
+-- Marco: completed game (score 15)
+INSERT INTO games (user_id, start_station_id, dest_station_id, route_json, status, final_score)
+SELECT
+  u.id,
+  (SELECT id FROM stations WHERE name = 'Green Park'),
+  (SELECT id FROM stations WHERE name = 'Kensington Palace'),
+  '[[1,6],[6,7],[7,8]]',
+  'completed',
+  15
+FROM users u WHERE u.username = 'Marco';
+
+-- Alice and Giulia: no completed games (omitted from ranking)
+
+-- Execution steps for Omar best game (final_score 22)
+INSERT INTO game_steps (game_id, step_order, from_station_id, to_station_id, event_id, coins_after)
+SELECT
+  g.id, 1,
+  (SELECT id FROM stations WHERE name = 'Covent Garden'),
+  (SELECT id FROM stations WHERE name = 'Tower of London'),
+  (SELECT id FROM events WHERE description = 'Quiet journey'),
+  20
+FROM games g
+JOIN users u ON u.id = g.user_id
+WHERE u.username = 'Omar' AND g.final_score = 22;
+
+INSERT INTO game_steps (game_id, step_order, from_station_id, to_station_id, event_id, coins_after)
+SELECT
+  g.id, 2,
+  (SELECT id FROM stations WHERE name = 'Tower of London'),
+  (SELECT id FROM stations WHERE name = 'Southwark'),
+  (SELECT id FROM events WHERE description = 'Kind passenger'),
+  21
+FROM games g
+JOIN users u ON u.id = g.user_id
+WHERE u.username = 'Omar' AND g.final_score = 22;
+
+INSERT INTO game_steps (game_id, step_order, from_station_id, to_station_id, event_id, coins_after)
+SELECT
+  g.id, 3,
+  (SELECT id FROM stations WHERE name = 'Southwark'),
+  (SELECT id FROM stations WHERE name = 'Notting Hill'),
+  (SELECT id FROM events WHERE description = 'Wrong platform'),
+  19
+FROM games g
+JOIN users u ON u.id = g.user_id
+WHERE u.username = 'Omar' AND g.final_score = 22;
+
+INSERT INTO game_steps (game_id, step_order, from_station_id, to_station_id, event_id, coins_after)
+SELECT
+  g.id, 4,
+  (SELECT id FROM stations WHERE name = 'Notting Hill'),
+  (SELECT id FROM stations WHERE name = 'Kensington Palace'),
+  (SELECT id FROM events WHERE description = 'Delay bonus'),
+  21
+FROM games g
+JOIN users u ON u.id = g.user_id
+WHERE u.username = 'Omar' AND g.final_score = 22;
+
+INSERT INTO game_steps (game_id, step_order, from_station_id, to_station_id, event_id, coins_after)
+SELECT
+  g.id, 5,
+  (SELECT id FROM stations WHERE name = 'Kensington Palace'),
+  (SELECT id FROM stations WHERE name = 'Harrods'),
+  (SELECT id FROM events WHERE description = 'Kind passenger'),
+  22
+FROM games g
+JOIN users u ON u.id = g.user_id
+WHERE u.username = 'Omar' AND g.final_score = 22;
+
+-- Execution steps for Paolo (final_score 21)
 INSERT INTO game_steps (game_id, step_order, from_station_id, to_station_id, event_id, coins_after)
 SELECT
   g.id, 1,
@@ -133,7 +213,7 @@ SELECT
   20
 FROM games g
 JOIN users u ON u.id = g.user_id
-WHERE u.username = 'Omar' AND g.final_score = 21;
+WHERE u.username = 'Paolo';
 
 INSERT INTO game_steps (game_id, step_order, from_station_id, to_station_id, event_id, coins_after)
 SELECT
@@ -144,7 +224,7 @@ SELECT
   21
 FROM games g
 JOIN users u ON u.id = g.user_id
-WHERE u.username = 'Omar' AND g.final_score = 21;
+WHERE u.username = 'Paolo';
 
 INSERT INTO game_steps (game_id, step_order, from_station_id, to_station_id, event_id, coins_after)
 SELECT
@@ -155,7 +235,7 @@ SELECT
   19
 FROM games g
 JOIN users u ON u.id = g.user_id
-WHERE u.username = 'Omar' AND g.final_score = 21;
+WHERE u.username = 'Paolo';
 
 INSERT INTO game_steps (game_id, step_order, from_station_id, to_station_id, event_id, coins_after)
 SELECT
@@ -166,4 +246,72 @@ SELECT
   21
 FROM games g
 JOIN users u ON u.id = g.user_id
-WHERE u.username = 'Omar' AND g.final_score = 21;
+WHERE u.username = 'Paolo';
+
+-- Execution steps for Francesca (final_score 18)
+INSERT INTO game_steps (game_id, step_order, from_station_id, to_station_id, event_id, coins_after)
+SELECT
+  g.id, 1,
+  (SELECT id FROM stations WHERE name = 'Green Park'),
+  (SELECT id FROM stations WHERE name = 'Regent Street'),
+  (SELECT id FROM events WHERE description = 'Quiet journey'),
+  20
+FROM games g
+JOIN users u ON u.id = g.user_id
+WHERE u.username = 'Francesca';
+
+INSERT INTO game_steps (game_id, step_order, from_station_id, to_station_id, event_id, coins_after)
+SELECT
+  g.id, 2,
+  (SELECT id FROM stations WHERE name = 'Regent Street'),
+  (SELECT id FROM stations WHERE name = 'Piccadilly Circus'),
+  (SELECT id FROM events WHERE description = 'Kind passenger'),
+  21
+FROM games g
+JOIN users u ON u.id = g.user_id
+WHERE u.username = 'Francesca';
+
+INSERT INTO game_steps (game_id, step_order, from_station_id, to_station_id, event_id, coins_after)
+SELECT
+  g.id, 3,
+  (SELECT id FROM stations WHERE name = 'Piccadilly Circus'),
+  (SELECT id FROM stations WHERE name = 'Trafalgar Square'),
+  (SELECT id FROM events WHERE description = 'Lost ticket'),
+  18
+FROM games g
+JOIN users u ON u.id = g.user_id
+WHERE u.username = 'Francesca';
+
+-- Execution steps for Marco (final_score 15)
+INSERT INTO game_steps (game_id, step_order, from_station_id, to_station_id, event_id, coins_after)
+SELECT
+  g.id, 1,
+  (SELECT id FROM stations WHERE name = 'Green Park'),
+  (SELECT id FROM stations WHERE name = 'Hyde Park Corner'),
+  (SELECT id FROM events WHERE description = 'Wrong platform'),
+  18
+FROM games g
+JOIN users u ON u.id = g.user_id
+WHERE u.username = 'Marco';
+
+INSERT INTO game_steps (game_id, step_order, from_station_id, to_station_id, event_id, coins_after)
+SELECT
+  g.id, 2,
+  (SELECT id FROM stations WHERE name = 'Hyde Park Corner'),
+  (SELECT id FROM stations WHERE name = 'Harrods'),
+  (SELECT id FROM events WHERE description = 'Lost ticket'),
+  15
+FROM games g
+JOIN users u ON u.id = g.user_id
+WHERE u.username = 'Marco';
+
+INSERT INTO game_steps (game_id, step_order, from_station_id, to_station_id, event_id, coins_after)
+SELECT
+  g.id, 3,
+  (SELECT id FROM stations WHERE name = 'Harrods'),
+  (SELECT id FROM stations WHERE name = 'Kensington Palace'),
+  (SELECT id FROM events WHERE description = 'Quiet journey'),
+  15
+FROM games g
+JOIN users u ON u.id = g.user_id
+WHERE u.username = 'Marco';
