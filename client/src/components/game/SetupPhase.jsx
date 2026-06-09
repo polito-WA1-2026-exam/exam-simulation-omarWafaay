@@ -1,4 +1,6 @@
 /** Setup — full network from GET /api/network?view=full */
+import { lineColorClass } from '../../utils/lineColor.js';
+
 export default function SetupPhase({ network, onStart, starting }) {
   return (
     <div className="game-phase setup-phase">
@@ -9,10 +11,18 @@ export default function SetupPhase({ network, onStart, starting }) {
 
       <div className="network-full">
         {network?.lines?.map((line) => (
-          <section key={line.id} className="line-block">
+          <section
+            key={line.id}
+            className={`line-block ${lineColorClass(line.name)}`}
+          >
             <h3>{line.name}</h3>
             <p className="line-stations">
-              {line.stations.map((s) => s.name).join(' → ')}
+              {line.stations.map((s, i) => (
+                <span key={s.id}>
+                  {i > 0 ? <span className="station-connector">—</span> : null}
+                  <span className="station-node">{s.name}</span>
+                </span>
+              ))}
             </p>
           </section>
         ))}

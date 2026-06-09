@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../auth/useAuth.js';
 
+const DEMO_USERS = ['Omar', 'Paolo', 'Francesca'];
+
 export default function LoginPage() {
   const { login } = useAuth();
   const navigate = useNavigate();
@@ -31,12 +33,17 @@ export default function LoginPage() {
     navigate('/game');
   }
 
+  function fillDemo(name) {
+    setUsername(name);
+    setPassword('password');
+    setError('');
+  }
+
   return (
     <div className="page login-page">
-      <div className="login-card">
-        <h1>Welcome to Last Race!</h1>
+      <div className="panel login-card">
+        <h1>Last Race</h1>
         <p className="lead">Plan your route. Beat the clock. Beat your best score.</p>
-        <p className="login-sub">Log in with your account to play.</p>
 
         <form onSubmit={handleSubmit} className="login-form" noValidate>
           <label htmlFor="login-username">Username</label>
@@ -67,15 +74,28 @@ export default function LoginPage() {
             </p>
           ) : null}
 
-          <button type="submit" className="btn-primary" disabled={submitting}>
+          <button type="submit" className="btn-primary btn-block" disabled={submitting}>
             {submitting ? 'Logging in…' : 'Login'}
           </button>
         </form>
 
-        <p className="seed-hint">
-          Demo accounts: <code>Omar</code>, <code>Paolo</code>, <code>Francesca</code>{' '}
-          — password <code>password</code>
-        </p>
+        <div className="panel demo-box">
+          <p className="demo-box-title">Demo accounts</p>
+          <p className="demo-box-hint">Password for all: <code>password</code></p>
+          <div className="demo-box-users">
+            {DEMO_USERS.map((name) => (
+              <button
+                key={name}
+                type="button"
+                className="btn-demo"
+                onClick={() => fillDemo(name)}
+                disabled={submitting}
+              >
+                {name}
+              </button>
+            ))}
+          </div>
+        </div>
 
         <p className="login-back">
           <Link to="/">Back to instructions</Link>

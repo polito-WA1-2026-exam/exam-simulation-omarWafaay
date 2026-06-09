@@ -20,6 +20,7 @@ export default function Navbar() {
         </NavLink>
 
         <nav className="header-nav">
+          
           {user ? (
             <>
               <NavLink to="/game" className={linkClass}>

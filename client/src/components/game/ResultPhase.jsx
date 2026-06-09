@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import CoinAmount from '../icons/CoinAmount.jsx';
 
 export default function ResultPhase({ result, game, onPlayAgain, replaying }) {
   const valid = result?.valid === true;
@@ -11,12 +12,13 @@ export default function ResultPhase({ result, game, onPlayAgain, replaying }) {
       {!valid ? (
         <p className="result-invalid">
           Your route was incomplete or invalid. You lose all 20 coins — final score{' '}
-          <strong>0</strong>.
+          <CoinAmount value={0} size={18} className="coin-amount-inline" />
         </p>
       ) : null}
 
       <p className="final-score">
-        Final score: <strong>{score}</strong> coins
+        Final score:{' '}
+        <CoinAmount value={score} size={26} className="final-score-amount" />
       </p>
 
       {game ? (

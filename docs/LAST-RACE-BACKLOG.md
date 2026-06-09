@@ -5,7 +5,7 @@
 **Work branch:** `dev`  
 **Submit on:** `main` + git tag `final` (deadline 2026-06-22)
 
-**You stopped after:** Step 9 (ranking page). **Next up:** Step 10 (README, screenshots, submission).
+**You stopped after:** UI polish + README (Step 10 in progress). **Next up:** screenshots, merge `main`, tag `final`.
 
 ---
 
@@ -24,7 +24,7 @@
 | 7 | Anonymous instructions (no map) | ✅ Done |
 | 8 | Game UI (setup → planning → execution → result) | ✅ Done |
 | 9 | Ranking page | ✅ Done |
-| 10 | README, screenshots, submission | ⬜ Next |
+| 10 | README, screenshots, submission | 🔄 In progress |
 
 ---
 
@@ -164,10 +164,10 @@ See [LAST-RACE-API-PLAN.md](./LAST-RACE-API-PLAN.md) §3–§10.
 
 ---
 
-## Step 10 — Submission ⬜
+## Step 10 — Submission 🔄
 
-- [ ] Fill `README.md` (APIs, tables, routes, components, credentials, AI disclosure)
-- [ ] Screenshot: ranking + game during play → `img/`
+- [x] Fill `README.md` (APIs, tables, routes, components, credentials, AI disclosure)
+- [ ] Screenshot: ranking + game during play → `img/` (see README checklist)
 - [ ] Manual test script (10 steps) from planning guide
 - [ ] Clean clone: `npm install` in `client` + `server`
 - [ ] Merge `dev` → `main`

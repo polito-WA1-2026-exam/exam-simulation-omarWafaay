@@ -80,7 +80,11 @@ export default function GamePage() {
   }
 
   if (phase === 'loading') {
-    return <p className="page-message">Loading game…</p>;
+    return (
+      <div className="page game-page">
+        <p className="page-message">Loading game…</p>
+      </div>
+    );
   }
 
   if (phase === 'error') {
