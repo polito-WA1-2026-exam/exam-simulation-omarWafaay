@@ -150,7 +150,9 @@ try {
         for (let i = 1; i < r.json.length; i++) {
           if (r.json[i].bestScore > r.json[i - 1].bestScore) return false;
         }
-        return !r.json.some((row) => row.username === 'Francesca');
+        return !r.json.some((row) =>
+          ['Francesca', 'Alice', 'Marco', 'Giulia'].includes(row.username)
+        );
       },
     },
     {

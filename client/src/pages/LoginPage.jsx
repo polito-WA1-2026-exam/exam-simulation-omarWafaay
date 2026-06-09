@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../auth/useAuth.js';
 
-const DEMO_USERS = ['Omar', 'Paolo', 'Francesca'];
+const DEMO_USERS = ['Omar', 'Paolo', 'Francesca', 'Alice', 'Marco', 'Giulia'];
 
 export default function LoginPage() {
   const { login } = useAuth();

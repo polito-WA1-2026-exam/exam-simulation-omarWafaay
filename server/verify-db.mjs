@@ -39,6 +39,7 @@ const checks = [
   ['segments > 0', segmentCount > 0, segmentCount],
   ['events >= 8', eventCount >= 8, eventCount],
   ['users >= 3', userCount >= 3, userCount],
+  ['users >= 6 (seed)', userCount >= 6, userCount],
 ];
 
 let failed = false;

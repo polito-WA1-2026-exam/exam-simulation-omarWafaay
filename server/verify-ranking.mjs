@@ -80,8 +80,8 @@ try {
     fail(`first place should be Paolo/22, got ${JSON.stringify(ranking.json[0])}`);
   } else if (ranking.json[1].username !== 'Omar' || ranking.json[1].bestScore !== 21) {
     fail(`second place should be Omar/21, got ${JSON.stringify(ranking.json[1])}`);
-  } else if (ranking.json.some((r) => r.username === 'Francesca')) {
-    fail('Francesca has no completed games and should be omitted');
+  } else if (ranking.json.some((r) => ['Francesca', 'Alice', 'Marco', 'Giulia'].includes(r.username))) {
+    fail('users without completed games should be omitted from ranking');
   } else ok('GET /api/ranking → Paolo (22) above Omar (21)');
 } catch (e) {
   fail(e.message);

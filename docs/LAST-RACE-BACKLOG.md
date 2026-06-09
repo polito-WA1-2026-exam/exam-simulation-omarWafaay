@@ -61,7 +61,7 @@
 
 **Verify:** `node verify-db.mjs` and `node audit-seed.mjs` (restart server first if DB is stale).
 
-**Users (seed):** `Omar` / `Paolo` / `Francesca` — password `password`
+**Users (seed):** `Omar`, `Paolo`, `Francesca`, `Alice`, `Marco`, `Giulia` — password `password`
 
 ---
 
@@ -160,7 +160,7 @@ See [LAST-RACE-API-PLAN.md](./LAST-RACE-API-PLAN.md) §3–§10.
 - [x] Current user row highlighted; empty + error states
 - [ ] Screenshot for README (ranking page) — Step 10
 
-**Verify:** login → `/ranking` → Paolo (22) above Omar (21); no Francesca.
+**Verify:** login → `/ranking` → Paolo (22) above Omar (21); no users without completed games.
 
 ---
 

@@ -86,7 +86,10 @@ INSERT INTO events (description, effect) VALUES
 INSERT INTO users (username, password, salt) VALUES
   ('Omar', '0082c7cb58611b309c54e8eed9de140e', '9d4b8f925ca5e3a54440287b2dc0c9bc'),
   ('Paolo', '960f7cfb98d4cee7b3fabdd4bff015fa', '81ecb808cee07c1bfb6e7d93a9071cf3'),
-  ('Francesca', '622f4edfdc6d56ed71943213f9e657a5', 'ce9dcd1fbcfa1155c77b312b5089cdc2');
+  ('Francesca', '622f4edfdc6d56ed71943213f9e657a5', 'ce9dcd1fbcfa1155c77b312b5089cdc2'),
+  ('Alice', 'efcbf153ded1251664c6fba92c5f3ef5', '824901039c976fdb27a471fe442c07ff'),
+  ('Marco', 'acdaa8373d0fed1952d4a20fb1dc35ff', '98439ed8fa7447a981c708c83fe218eb'),
+  ('Giulia', 'f1298e0e205d1cedcec1ac418254193f', 'f27f193868394ec4530e6bc35a615aa5');
 
 -- Omar: completed games (best score 21)
 INSERT INTO games (user_id, start_station_id, dest_station_id, route_json, status, final_score)

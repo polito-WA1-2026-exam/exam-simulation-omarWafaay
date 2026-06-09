@@ -399,6 +399,9 @@ One commit per slice on `dev`.
 | `Omar` | `password` |
 | `Paolo` | `password` |
 | `Francesca` | `password` |
+| `Alice` | `password` |
+| `Marco` | `password` |
+| `Giulia` | `password` |
 
 ---
 

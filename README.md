@@ -145,7 +145,10 @@ Do this once before submission (browser at `http://localhost:5173`, both servers
 |----------|----------|--------|
 | `Omar` | `password` | Best score **21** (seed) |
 | `Paolo` | `password` | Best score **22** (seed) |
-| `Francesca` | `password` | No completed games (not in ranking) |
+| `Francesca` | `password` | No completed games |
+| `Alice` | `password` | No completed games |
+| `Marco` | `password` | No completed games |
+| `Giulia` | `password` | No completed games |
 
 ---
 
