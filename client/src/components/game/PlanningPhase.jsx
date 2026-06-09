@@ -121,6 +121,10 @@ export default function PlanningPhase({ game, onComplete, onError }) {
   if (loadError) {
     return <p className="form-error">{loadError}</p>;
   }
+  const WARNING_MS = 30000;
+  const URGENT_MS = 10000;
+  const timerClass =
+    msLeft <= URGENT_MS ? 'timer-urgent' : msLeft <= WARNING_MS ? 'timer-warning' : '';
 
   return (
     <div className="game-phase planning-phase">
@@ -134,7 +138,7 @@ export default function PlanningPhase({ game, onComplete, onError }) {
             <strong>Destination:</strong> {game.destination} ({game.destinationStationId})
           </p>
         </div>
-        <div className={`timer-box ${msLeft <= 10000 ? 'timer-urgent' : ''}`}>
+        <div className={`timer-box ${timerClass}`}>
           <span className="timer-label">Time left</span>
           <span className="timer-value">{formatTime(msLeft)}</span>
         </div>

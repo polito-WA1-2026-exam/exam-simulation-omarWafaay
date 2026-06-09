@@ -28,6 +28,9 @@
   --danger: #c1121f;
   --danger-bg: rgba(193, 18, 31, 0.08);
 
+  --warning: var(--line-yellow);
+  --warning-bg: rgba(233, 163, 25, 0.08);
+
   --code-bg: #ebe8e2;
   --shadow: 0 1px 3px rgba(26, 26, 26, 0.06), 0 4px 12px rgba(26, 26, 26, 0.04);
 

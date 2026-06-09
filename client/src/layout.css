@@ -637,6 +637,16 @@
   color: var(--danger);
 }
 
+.timer-warning {
+  border-color: var(--warning);
+  background: var(--warning-bg);
+  color: var(--warning);
+}
+
+.timer-warning .timer-value {
+  color: var(--warning);
+}
+
 .timer-label {
   display: block;
   font-size: 0.75rem;
