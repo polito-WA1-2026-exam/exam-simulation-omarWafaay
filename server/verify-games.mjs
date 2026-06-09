@@ -577,7 +577,7 @@ try {
 
   // 7a. Station loop allowed (exam 2026-06-05: same station may repeat)
 
-  //     Porta Velaria appears twice; no segment is reused.
+  //     Regent Street appears twice; no segment is reused.
 
   // -------------------------------------------------------------------------
 

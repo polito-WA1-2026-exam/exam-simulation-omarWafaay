@@ -47,20 +47,20 @@ erDiagram
 
 ## Network (seed)
 
-Fictional network inspired by the exam example (names are student-defined).
+Fictional metro network — station names inspired by [Big Bus Tours London](https://www.bigbustours.com/en/london/london-routes-and-tour-maps) hop-on hop-off stops. Topology (lines, interchanges, segment count) is unchanged.
 
 | Line | Stations (in order) |
 |------|---------------------|
-| **Red Line** | Centrale → Porta Velaria → Crocevia del Falco → Mercato Vecchio → Piazza delle Lanterne |
-| **Blue Line** | Centrale → Fontana Oscura → Borgo Sereno → Colle Antico → Viale dei Mosaici |
-| **Green Line** | Porta Velaria → Fontana Oscura → Stazione Lago → Torre Cinerea |
-| **Yellow Line** | Piazza delle Lanterne → Torre Cinerea → Campo dell'Eco → Viale dei Mosaici |
+| **Red Line** | Green Park → Regent Street → Piccadilly Circus → Trafalgar Square → Covent Garden |
+| **Blue Line** | Green Park → Hyde Park Corner → Harrods → Kensington Palace → Notting Hill |
+| **Green Line** | Regent Street → Hyde Park Corner → Lancaster Gate → Tower of London |
+| **Yellow Line** | Covent Garden → Tower of London → Southwark → Notting Hill |
 
 **Counts (seed):** 4 lines, 12 stations, **6** interchange stations (≥3 required, ≤ half of 12).
 
-**Interchange stations:** Centrale, Porta Velaria, Fontana Oscura, Piazza delle Lanterne, Torre Cinerea, Viale dei Mosaici.
+**Interchange stations:** Green Park, Regent Street, Hyde Park Corner, Covent Garden, Tower of London, Notting Hill.
 
-**Not an interchange:** Campo dell'Eco (Yellow Line only).
+**Not an interchange:** Southwark (Yellow Line only).
 
 **Segments:** one row per consecutive pair on each line (undirected, IDs stored with `station_a_id < station_b_id`).
 

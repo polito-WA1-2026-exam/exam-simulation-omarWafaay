@@ -13,7 +13,7 @@ import { executeRoute, STARTING_COINS } from '../services/gameEngine.js';
 // we store when planning started and send back planningDeadline (= start + 90s).
 const PLANNING_SECONDS = 90;
 
-// Turn station rows into { 1: "Centrale", 6: "Fontana Oscura", ... } for API responses.
+// Turn station rows into { 1: "Green Park", 6: "Hyde Park Corner", ... } for API responses.
 async function getStationNames() {
   const rows = await all('SELECT id, name FROM stations');
   return Object.fromEntries(rows.map((r) => [r.id, r.name]));

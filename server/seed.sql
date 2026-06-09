@@ -1,4 +1,5 @@
 -- Last Race — seed data (see docs/LAST-RACE-DATABASE.md)
+-- Station names inspired by Big Bus Tours London routes (topology unchanged).
 
 INSERT INTO lines (name) VALUES
   ('Red Line'),
@@ -7,62 +8,62 @@ INSERT INTO lines (name) VALUES
   ('Yellow Line');
 
 INSERT INTO stations (name) VALUES
-  ('Centrale'),
-  ('Porta Velaria'),
-  ('Crocevia del Falco'),
-  ('Mercato Vecchio'),
-  ('Piazza delle Lanterne'),
-  ('Fontana Oscura'),
-  ('Borgo Sereno'),
-  ('Colle Antico'),
-  ('Viale dei Mosaici'),
-  ('Stazione Lago'),
-  ('Torre Cinerea'),
-  ('Campo dell''Eco');
+  ('Green Park'),
+  ('Regent Street'),
+  ('Piccadilly Circus'),
+  ('Trafalgar Square'),
+  ('Covent Garden'),
+  ('Hyde Park Corner'),
+  ('Harrods'),
+  ('Kensington Palace'),
+  ('Notting Hill'),
+  ('Lancaster Gate'),
+  ('Tower of London'),
+  ('Southwark');
 
--- Red Line
+-- Red Line (Big Bus Red Route — central sightseeing)
 INSERT INTO station_lines (line_id, station_id, position)
-SELECT (SELECT id FROM lines WHERE name = 'Red Line'), (SELECT id FROM stations WHERE name = 'Centrale'), 0;
+SELECT (SELECT id FROM lines WHERE name = 'Red Line'), (SELECT id FROM stations WHERE name = 'Green Park'), 0;
 INSERT INTO station_lines (line_id, station_id, position)
-SELECT (SELECT id FROM lines WHERE name = 'Red Line'), (SELECT id FROM stations WHERE name = 'Porta Velaria'), 1;
+SELECT (SELECT id FROM lines WHERE name = 'Red Line'), (SELECT id FROM stations WHERE name = 'Regent Street'), 1;
 INSERT INTO station_lines (line_id, station_id, position)
-SELECT (SELECT id FROM lines WHERE name = 'Red Line'), (SELECT id FROM stations WHERE name = 'Crocevia del Falco'), 2;
+SELECT (SELECT id FROM lines WHERE name = 'Red Line'), (SELECT id FROM stations WHERE name = 'Piccadilly Circus'), 2;
 INSERT INTO station_lines (line_id, station_id, position)
-SELECT (SELECT id FROM lines WHERE name = 'Red Line'), (SELECT id FROM stations WHERE name = 'Mercato Vecchio'), 3;
+SELECT (SELECT id FROM lines WHERE name = 'Red Line'), (SELECT id FROM stations WHERE name = 'Trafalgar Square'), 3;
 INSERT INTO station_lines (line_id, station_id, position)
-SELECT (SELECT id FROM lines WHERE name = 'Red Line'), (SELECT id FROM stations WHERE name = 'Piazza delle Lanterne'), 4;
+SELECT (SELECT id FROM lines WHERE name = 'Red Line'), (SELECT id FROM stations WHERE name = 'Covent Garden'), 4;
 
--- Blue Line
+-- Blue Line (Big Bus Blue Route — west end)
 INSERT INTO station_lines (line_id, station_id, position)
-SELECT (SELECT id FROM lines WHERE name = 'Blue Line'), (SELECT id FROM stations WHERE name = 'Centrale'), 0;
+SELECT (SELECT id FROM lines WHERE name = 'Blue Line'), (SELECT id FROM stations WHERE name = 'Green Park'), 0;
 INSERT INTO station_lines (line_id, station_id, position)
-SELECT (SELECT id FROM lines WHERE name = 'Blue Line'), (SELECT id FROM stations WHERE name = 'Fontana Oscura'), 1;
+SELECT (SELECT id FROM lines WHERE name = 'Blue Line'), (SELECT id FROM stations WHERE name = 'Hyde Park Corner'), 1;
 INSERT INTO station_lines (line_id, station_id, position)
-SELECT (SELECT id FROM lines WHERE name = 'Blue Line'), (SELECT id FROM stations WHERE name = 'Borgo Sereno'), 2;
+SELECT (SELECT id FROM lines WHERE name = 'Blue Line'), (SELECT id FROM stations WHERE name = 'Harrods'), 2;
 INSERT INTO station_lines (line_id, station_id, position)
-SELECT (SELECT id FROM lines WHERE name = 'Blue Line'), (SELECT id FROM stations WHERE name = 'Colle Antico'), 3;
+SELECT (SELECT id FROM lines WHERE name = 'Blue Line'), (SELECT id FROM stations WHERE name = 'Kensington Palace'), 3;
 INSERT INTO station_lines (line_id, station_id, position)
-SELECT (SELECT id FROM lines WHERE name = 'Blue Line'), (SELECT id FROM stations WHERE name = 'Viale dei Mosaici'), 4;
+SELECT (SELECT id FROM lines WHERE name = 'Blue Line'), (SELECT id FROM stations WHERE name = 'Notting Hill'), 4;
 
 -- Green Line
 INSERT INTO station_lines (line_id, station_id, position)
-SELECT (SELECT id FROM lines WHERE name = 'Green Line'), (SELECT id FROM stations WHERE name = 'Porta Velaria'), 0;
+SELECT (SELECT id FROM lines WHERE name = 'Green Line'), (SELECT id FROM stations WHERE name = 'Regent Street'), 0;
 INSERT INTO station_lines (line_id, station_id, position)
-SELECT (SELECT id FROM lines WHERE name = 'Green Line'), (SELECT id FROM stations WHERE name = 'Fontana Oscura'), 1;
+SELECT (SELECT id FROM lines WHERE name = 'Green Line'), (SELECT id FROM stations WHERE name = 'Hyde Park Corner'), 1;
 INSERT INTO station_lines (line_id, station_id, position)
-SELECT (SELECT id FROM lines WHERE name = 'Green Line'), (SELECT id FROM stations WHERE name = 'Stazione Lago'), 2;
+SELECT (SELECT id FROM lines WHERE name = 'Green Line'), (SELECT id FROM stations WHERE name = 'Lancaster Gate'), 2;
 INSERT INTO station_lines (line_id, station_id, position)
-SELECT (SELECT id FROM lines WHERE name = 'Green Line'), (SELECT id FROM stations WHERE name = 'Torre Cinerea'), 3;
+SELECT (SELECT id FROM lines WHERE name = 'Green Line'), (SELECT id FROM stations WHERE name = 'Tower of London'), 3;
 
--- Yellow Line (Campo dell'Eco is Yellow-only so interchange count stays at 6/12)
+-- Yellow Line (Southwark is Yellow-only so interchange count stays at 6/12)
 INSERT INTO station_lines (line_id, station_id, position)
-SELECT (SELECT id FROM lines WHERE name = 'Yellow Line'), (SELECT id FROM stations WHERE name = 'Piazza delle Lanterne'), 0;
+SELECT (SELECT id FROM lines WHERE name = 'Yellow Line'), (SELECT id FROM stations WHERE name = 'Covent Garden'), 0;
 INSERT INTO station_lines (line_id, station_id, position)
-SELECT (SELECT id FROM lines WHERE name = 'Yellow Line'), (SELECT id FROM stations WHERE name = 'Torre Cinerea'), 1;
+SELECT (SELECT id FROM lines WHERE name = 'Yellow Line'), (SELECT id FROM stations WHERE name = 'Tower of London'), 1;
 INSERT INTO station_lines (line_id, station_id, position)
-SELECT (SELECT id FROM lines WHERE name = 'Yellow Line'), (SELECT id FROM stations WHERE name = 'Campo dell''Eco'), 2;
+SELECT (SELECT id FROM lines WHERE name = 'Yellow Line'), (SELECT id FROM stations WHERE name = 'Southwark'), 2;
 INSERT INTO station_lines (line_id, station_id, position)
-SELECT (SELECT id FROM lines WHERE name = 'Yellow Line'), (SELECT id FROM stations WHERE name = 'Viale dei Mosaici'), 3;
+SELECT (SELECT id FROM lines WHERE name = 'Yellow Line'), (SELECT id FROM stations WHERE name = 'Notting Hill'), 3;
 
 -- Segments from consecutive stations on each line
 INSERT OR IGNORE INTO segments (station_a_id, station_b_id)
@@ -91,8 +92,8 @@ INSERT INTO users (username, password, salt) VALUES
 INSERT INTO games (user_id, start_station_id, dest_station_id, route_json, status, final_score)
 SELECT
   u.id,
-  (SELECT id FROM stations WHERE name = 'Centrale'),
-  (SELECT id FROM stations WHERE name = 'Viale dei Mosaici'),
+  (SELECT id FROM stations WHERE name = 'Green Park'),
+  (SELECT id FROM stations WHERE name = 'Notting Hill'),
   '[[1,6],[6,7],[7,8],[8,9]]',
   'completed',
   21
@@ -101,8 +102,8 @@ FROM users u WHERE u.username = 'Omar';
 INSERT INTO games (user_id, start_station_id, dest_station_id, route_json, status, final_score)
 SELECT
   u.id,
-  (SELECT id FROM stations WHERE name = 'Centrale'),
-  (SELECT id FROM stations WHERE name = 'Campo dell''Eco'),
+  (SELECT id FROM stations WHERE name = 'Green Park'),
+  (SELECT id FROM stations WHERE name = 'Southwark'),
   '[[1,2],[2,6],[6,10],[10,11],[11,12]]',
   'completed',
   12
@@ -112,8 +113,8 @@ FROM users u WHERE u.username = 'Omar';
 INSERT INTO games (user_id, start_station_id, dest_station_id, route_json, status, final_score)
 SELECT
   u.id,
-  (SELECT id FROM stations WHERE name = 'Piazza delle Lanterne'),
-  (SELECT id FROM stations WHERE name = 'Borgo Sereno'),
+  (SELECT id FROM stations WHERE name = 'Covent Garden'),
+  (SELECT id FROM stations WHERE name = 'Harrods'),
   '[[5,11],[11,12],[12,9],[9,8],[8,7]]',
   'completed',
   22
@@ -123,8 +124,8 @@ FROM users u WHERE u.username = 'Paolo';
 INSERT INTO game_steps (game_id, step_order, from_station_id, to_station_id, event_id, coins_after)
 SELECT
   g.id, 1,
-  (SELECT id FROM stations WHERE name = 'Centrale'),
-  (SELECT id FROM stations WHERE name = 'Fontana Oscura'),
+  (SELECT id FROM stations WHERE name = 'Green Park'),
+  (SELECT id FROM stations WHERE name = 'Hyde Park Corner'),
   (SELECT id FROM events WHERE description = 'Quiet journey'),
   20
 FROM games g
@@ -134,8 +135,8 @@ WHERE u.username = 'Omar' AND g.final_score = 21;
 INSERT INTO game_steps (game_id, step_order, from_station_id, to_station_id, event_id, coins_after)
 SELECT
   g.id, 2,
-  (SELECT id FROM stations WHERE name = 'Fontana Oscura'),
-  (SELECT id FROM stations WHERE name = 'Borgo Sereno'),
+  (SELECT id FROM stations WHERE name = 'Hyde Park Corner'),
+  (SELECT id FROM stations WHERE name = 'Harrods'),
   (SELECT id FROM events WHERE description = 'Kind passenger'),
   21
 FROM games g
@@ -145,8 +146,8 @@ WHERE u.username = 'Omar' AND g.final_score = 21;
 INSERT INTO game_steps (game_id, step_order, from_station_id, to_station_id, event_id, coins_after)
 SELECT
   g.id, 3,
-  (SELECT id FROM stations WHERE name = 'Borgo Sereno'),
-  (SELECT id FROM stations WHERE name = 'Colle Antico'),
+  (SELECT id FROM stations WHERE name = 'Harrods'),
+  (SELECT id FROM stations WHERE name = 'Kensington Palace'),
   (SELECT id FROM events WHERE description = 'Wrong platform'),
   19
 FROM games g
@@ -156,8 +157,8 @@ WHERE u.username = 'Omar' AND g.final_score = 21;
 INSERT INTO game_steps (game_id, step_order, from_station_id, to_station_id, event_id, coins_after)
 SELECT
   g.id, 4,
-  (SELECT id FROM stations WHERE name = 'Colle Antico'),
-  (SELECT id FROM stations WHERE name = 'Viale dei Mosaici'),
+  (SELECT id FROM stations WHERE name = 'Kensington Palace'),
+  (SELECT id FROM stations WHERE name = 'Notting Hill'),
   (SELECT id FROM events WHERE description = 'Delay bonus'),
   21
 FROM games g

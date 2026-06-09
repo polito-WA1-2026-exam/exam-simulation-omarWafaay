@@ -2,7 +2,7 @@
  * When planning starts, the server must pick a random start station and destination.
  *
  * Exam rule: they must be reachable and the *shortest* path between them must use
- * at least 3 segments (e.g. Centrale → Porta Velaria → Crocevia → Piazza = 3 segments, 4 stops).
+ * at least 3 segments (e.g. Green Park → Regent Street → Piccadilly → Covent Garden).
  */
 import { all } from '../db.js';
 

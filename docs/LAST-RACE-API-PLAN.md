@@ -128,13 +128,13 @@ Game **instructions** for anonymous users can live only in React (no API require
       "id": 1,
       "name": "Red Line",
       "stations": [
-        { "id": 1, "name": "Centrale", "isInterchange": true },
-        { "id": 2, "name": "Porta Velaria", "isInterchange": true }
+        { "id": 1, "name": "Green Park", "isInterchange": true },
+        { "id": 2, "name": "Regent Street", "isInterchange": true }
       ]
     }
   ],
   "segments": [
-    { "fromId": 1, "toId": 2, "from": "Centrale", "to": "Porta Velaria" }
+    { "fromId": 1, "toId": 2, "from": "Green Park", "to": "Regent Street" }
   ]
 }
 ```
@@ -148,7 +148,7 @@ Stations only — **no lines**, no segments in this response.
 ```json
 {
   "stations": [
-    { "id": 1, "name": "Centrale", "isInterchange": true }
+    { "id": 1, "name": "Green Park", "isInterchange": true }
   ]
 }
 ```
@@ -163,8 +163,8 @@ Segment pairs for planning come from `GET /api/segments`.
     {
       "fromId": 1,
       "toId": 6,
-      "from": "Centrale",
-      "to": "Fontana Oscura"
+      "from": "Green Park",
+      "to": "Hyde Park Corner"
     }
   ]
 }
@@ -193,8 +193,8 @@ Server picks start and destination (reachable, **at least 3 legs** on shortest p
   "coins": 20,
   "startStationId": 1,
   "destinationStationId": 9,
-  "start": "Centrale",
-  "destination": "Viale dei Mosaici",
+  "start": "Green Park",
+  "destination": "Notting Hill",
   "planningDeadline": "2026-05-31T12:01:30.000Z"
 }
 ```
@@ -240,8 +240,8 @@ Each pair is `[fromStationId, toStationId]` in travel order.
       "order": 1,
       "fromStationId": 1,
       "toStationId": 6,
-      "from": "Centrale",
-      "to": "Fontana Oscura",
+      "from": "Green Park",
+      "to": "Hyde Park Corner",
       "event": { "description": "Quiet journey", "effect": 0 },
       "coinsAfter": 20
     }
