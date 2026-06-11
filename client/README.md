@@ -9,6 +9,8 @@ npm install
 npm run dev
 ```
 
+Icons (coin, medals): PNGs in `src/assets/` are committed. Source SVGs are gitignored — keep them locally, edit, then `npm run export-icons`.
+
 App: `http://localhost:5173` — requires the API server on `http://localhost:3001`.
 
 ## Documentation

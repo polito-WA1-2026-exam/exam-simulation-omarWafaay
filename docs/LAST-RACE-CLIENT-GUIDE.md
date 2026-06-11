@@ -44,8 +44,12 @@ client/src/
     ranking/
       RankingIcons.jsx     Gold/silver/bronze medals for top 3
     icons/
-      CoinIcon.jsx         Gold coin SVG
+      CoinIcon.jsx         Gold coin (PNG from assets/coin.png)
       CoinAmount.jsx       Coin icon + number (reused everywhere)
+
+  assets/
+    coin.png, medal-*.png  Committed — used in components
+    coin.svg, medal-*.svg  Local only (gitignored) — edit, then npm run export-icons
 
   utils/
     lineColor.js           "Red Line" → CSS class line-color-red
@@ -248,7 +252,8 @@ Logged out: Instructions · Login
 | Change result messages | `ResultPhase.jsx` |
 | Change ranking title | `RankingPage.jsx` — `<h1>` |
 | Change medal icons | `RankingIcons.jsx` |
-| Change coin icon look | `CoinIcon.jsx` |
+| Change coin icon look | Edit local `assets/coin.svg` (gitignored), then `cd client` → `npm run export-icons`, commit the PNG |
+| Change medal look | Same for `assets/medal-gold.svg` (etc.) — commit updated PNGs only |
 | Add subway background lines | `SubwayMapBackground.jsx` — add `<path>` / `<circle>` |
 | Block a route when logged out | `ProtectedRoute.jsx` (already redirects to `/login`) |
 | Change where login sends you | `LoginPage.jsx` — `navigate('/game')` |

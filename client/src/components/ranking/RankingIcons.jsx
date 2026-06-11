@@ -1,43 +1,30 @@
-/** Medal icons for the ranking page (Mini Metro–style, flat). */
-import CoinIcon from '../icons/CoinIcon.jsx';
+/** Medal PNGs exported from assets/medal-*.svg */
+import medalGoldImg from '../../assets/medal-gold.png';
+import medalSilverImg from '../../assets/medal-silver.png';
+import medalBronzeImg from '../../assets/medal-bronze.png';
 
-export { CoinIcon };
+const MEDAL_W = 28;
+const MEDAL_H = 34;
 
-const medalProps = {
-  width: 28,
-  height: 34,
-  viewBox: '0 0 28 34',
-  'aria-hidden': true,
-};
-
-function Medal({ ribbon, disc, stroke }) {
+function MedalImg({ src, title }) {
   return (
-    <svg className="ranking-icon ranking-medal" {...medalProps}>
-      <path d="M9 13 L7 32 L14 26 L14 13 Z" fill={ribbon} />
-      <path d="M19 13 L21 32 L14 26 L14 13 Z" fill={ribbon} opacity="0.85" />
-      <circle cx="14" cy="11" r="9" fill={disc} stroke={stroke} strokeWidth="1.5" />
-      <circle cx="14" cy="11" r="6.5" fill="none" stroke={stroke} strokeWidth="0.75" opacity="0.45" />
-    </svg>
+    <img
+      src={src}
+      className="ranking-icon ranking-medal"
+      width={MEDAL_W}
+      height={MEDAL_H}
+      alt=""
+      aria-hidden
+      title={title}
+    />
   );
-}
-
-export function MedalGold() {
-  return <Medal ribbon="#c9a227" disc="#f4d35e" stroke="#9a7b0a" />;
-}
-
-export function MedalSilver() {
-  return <Medal ribbon="#8a939c" disc="#e8ecef" stroke="#6b7280" />;
-}
-
-export function MedalBronze() {
-  return <Medal ribbon="#9a5c2e" disc="#d4a574" stroke="#7a4520" />;
 }
 
 export function RankPlace({ place }) {
   if (place === 1) {
     return (
       <span className="ranking-place" title="1st place">
-        <MedalGold />
+        <MedalImg src={medalGoldImg} title="1st place" />
         <span className="sr-only">1st place</span>
       </span>
     );
@@ -45,7 +32,7 @@ export function RankPlace({ place }) {
   if (place === 2) {
     return (
       <span className="ranking-place" title="2nd place">
-        <MedalSilver />
+        <MedalImg src={medalSilverImg} title="2nd place" />
         <span className="sr-only">2nd place</span>
       </span>
     );
@@ -53,7 +40,7 @@ export function RankPlace({ place }) {
   if (place === 3) {
     return (
       <span className="ranking-place" title="3rd place">
-        <MedalBronze />
+        <MedalImg src={medalBronzeImg} title="3rd place" />
         <span className="sr-only">3rd place</span>
       </span>
     );

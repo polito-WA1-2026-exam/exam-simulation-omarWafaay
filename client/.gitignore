@@ -22,3 +22,7 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Icon sources — only PNGs are committed; edit SVG locally, then npm run export-icons
+src/assets/coin.svg
+src/assets/medal-*.svg

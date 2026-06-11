@@ -1013,12 +1013,13 @@
   color: #fff;
 }
 
-.col-place {
-  width: 3.5rem;
+.ranking-table .col-place {
+  width: 4.5rem;
   text-align: center;
 }
 
-.col-num {
+.ranking-table .col-num {
+  width: 6.5rem;
   text-align: right;
   white-space: nowrap;
 }
@@ -1028,6 +1029,40 @@
 }
 
 /* --- Ranking --- */
+
+/* One column — summary, table, and actions share the same width */
+.ranking-stack {
+  width: 100%;
+  max-width: 520px;
+  margin-inline: auto;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.ranking-stack h1,
+.ranking-stack .phase-hint,
+.ranking-stack .page-message,
+.ranking-stack .form-error {
+  text-align: center;
+}
+
+.ranking-stack .ranking-summary,
+.ranking-stack .ranking-table-wrap,
+.ranking-stack .ranking-empty {
+  width: 100%;
+}
+
+.ranking-table-wrap {
+  margin-top: 1.25rem;
+}
+
+.ranking-stack .ranking-table {
+  width: 100%;
+  table-layout: fixed;
+  margin-top: 0;
+}
 
 .sr-only {
   position: absolute;
